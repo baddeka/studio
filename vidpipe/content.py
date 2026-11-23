@@ -47,6 +47,7 @@ def script_hash(video):
 def research(video, force=False):
     if video.research.exists() and not force:
         say("research: already done (use --force to redo)")
+        adopt_research(video)
         return
     m = _meta(video)
     text = prompt("research", today=datetime.date.today().isoformat(), **m)
@@ -364,6 +365,9 @@ def shotlist(video, force=False, only_part=None):
     beats = s.beats(sc["beat_min_words"], sc["beat_max_words"])
     old = read_json(video.shotlist, {})
     kept = []
+    if old and not old.get("script_hash") and not force:
+        adopt_shotlist(video, old)
+        return
     if old and not force and only_part is None:
         if old.get("script_hash") == script_hash(video):
             say("shotlist: already done (use --force to redo)")
@@ -578,8 +582,12 @@ PACKAGE_SCHEMA = {
 
 
 def package(video, force=False):
-    if video.package.exists() and not force:
-        say("package: already done (use --force to redo)")
+    old = read_json(video.package, {})
+    if old and not force:
+        if not old.get("script_hash") or old.get("made_by") == "hand":
+            adopt_package(video, old)
+        else:
+            say("package: already done (use --force to redo)")
         render_package_md(video)
         return
     sc = cfg()["shotlist"]
@@ -663,3 +671,265 @@ def full_description(data, timing, sources):
         src_lines.pop()
         body = "\n\n".join(parts + ["\n".join(src_lines + ["(full source list in the pinned comment)"])] + tail)
     return body
+
+
+# Hand-made files: a dossier, shot list or package written outside the pipeline, by a person or another Claude.
+# They are checked and taken over as they are. Nothing here calls Claude, and a file with problems stops the run
+# with a list of what to fix, so a hand-made file is never silently thrown away and paid for again.
+
+TONES = ["neutral", "loss", "gain", "alert"]
+SCENE_TYPES = ["still", "motion", "card", "reuse"]
+BEATS_HELP = ("The beat numbers come from: vp beats {slug} --json  "
+              "(or, without the pipeline installed: python -m vidpipe.beats 02_script.md --json)")
+
+
+def script_beats(video):
+    sc = cfg()["shotlist"]
+    s = Script(video.script.read_text(encoding="utf-8"))
+    return s, s.beats(sc["beat_min_words"], sc["beat_max_words"])
+
+
+def _stop(name, problems, hint):
+    shown = problems[:25]
+    lines = [f"{name} was written by hand and has {len(problems)} problem{'s' if len(problems) != 1 else ''}; "
+             "nothing was changed:"]
+    lines += [f"  - {p}" for p in shown]
+    if len(problems) > len(shown):
+        lines.append(f"  ... and {len(problems) - len(shown)} more")
+    raise SystemExit("\n".join(lines + [hint]))
+
+
+def _beat_list(nums):
+    """[3, 7, 8, 9, 12] -> 'B3, B7-B9, B12'."""
+    runs = []
+    for n in sorted(set(nums)):
+        if runs and n == runs[-1][1] + 1:
+            runs[-1][1] = n
+        else:
+            runs.append([n, n])
+    out = [f"B{a}" if a == b else f"B{a}-B{b}" for a, b in runs]
+    return ", ".join(out[:12]) + (f" and {len(out) - 12} more" if len(out) > 12 else "")
+
+
+def _scene_ref(value, part):
+    """'s3-7', 'S3-07', or 7 (the 7th scene of the part, as the shot-list prompt counts them) -> 'S3-07'."""
+    if isinstance(value, int) and not isinstance(value, bool):
+        return scene_id(part, value) if value > 0 else ""
+    m = re.fullmatch(r"\s*[Ss](\d+)-(\d+)\s*", str(value or ""))
+    return scene_id(int(m.group(1)), int(m.group(2))) if m else str(value or "").strip()
+
+
+def _strings(value):
+    value = [value] if isinstance(value, str) else value
+    return [str(x).strip() for x in value if str(x).strip()] if isinstance(value, list) else []
+
+
+def adopt_research(video):
+    """sources.json (the source list of the video description) for a dossier written or edited by hand."""
+    if video.sources.exists() and video.sources.stat().st_mtime >= video.research.stat().st_mtime:
+        return
+    body = video.research.read_text(encoding="utf-8")
+    if "## Sources" not in body:
+        warn("01_research.md has no '## Sources' section, so the video description will list no sources")
+        return
+    sources = parse_sources(body)
+    check_links(sources)
+    write_json(video.sources, sources)
+    bad = [s for s in sources if s["status"] in ("broken", "unreachable")]
+    say(f"research: read {len(sources)} sources from {video.research.name}, {len(bad)} with dead links")
+    for s in bad:
+        warn(f"source [{s['n']}] {s['status']}: {s['url']}")
+
+
+def adopt_shotlist(video, data):
+    """Check a hand-made shot list against the script and fill in what the pipeline adds itself."""
+    s, beats = script_beats(video)
+    by_id = {b["id"]: b for b in beats}
+    hint = "Fix them and run this again. " + BEATS_HELP.format(slug=video.slug)
+    given = data.get("beats")
+    if given:
+        if not isinstance(given, list):
+            _stop(video.shotlist.name, ['"beats" must be the list that the beats helper prints'], hint)
+        for b, g in zip(beats, given):
+            text = " ".join(str(g.get("text", "")).split()) if isinstance(g, dict) else ""
+            if not isinstance(g, dict) or g.get("id") != b["id"] or text != b["text"]:
+                _stop(video.shotlist.name, [
+                    f"its beats stop matching {video.script.name} at B{b['id']} (\"{b['text'][:60]}\"): the script "
+                    "changed after the shot list was written, or the beats were not made with the beats helper"], hint)
+        if len(given) != len(beats):
+            _stop(video.shotlist.name, [f"it has {len(given)} beats, but {video.script.name} splits into {len(beats)}"],
+                  hint)
+    raw = data.get("scenes")
+    if not isinstance(raw, list) or not raw:
+        _stop(video.shotlist.name, ["it has no scenes"], hint)
+    problems, notes, scenes, covered, counters = [], [], [], [], {}
+    beats_ok = True
+    for i, sc in enumerate(raw, 1):
+        if not isinstance(sc, dict):
+            problems.append(f"scene {i} is not an object")
+            beats_ok = False
+            continue
+        name = str(sc.get("id") or f"scene {i}")
+        bl = sc.get("beats")
+        bl = [bl] if isinstance(bl, int) else bl
+        if not isinstance(bl, list) or not bl or not all(isinstance(x, int) and x in by_id for x in bl):
+            problems.append(f"{name}: beats must be a list of beat numbers between 1 and {len(beats)}")
+            beats_ok = False
+            continue
+        bl = sorted(bl)
+        parts = sorted({by_id[x]["part"] for x in bl})
+        if len(parts) > 1:
+            problems.append(f"{name}: its beats ({_beat_list(bl)}) are in different parts")
+            beats_ok = False
+            continue
+        part = parts[0]
+        covered += bl
+        if sc.get("part") not in (None, "", part):
+            problems.append(f"{name}: part is {sc['part']}, but its beats are in part {part}")
+        counters[part] = counters.get(part, 0) + 1
+        sid = _scene_ref(sc.get("id") or counters[part], part)
+        if not re.fullmatch(rf"S{part}-\d{{2,}}", sid):
+            problems.append(f"{name}: the id must be S{part}-NN, because its beats are in part {part}")
+        elif any(x["id"] == sid for x in scenes):
+            problems.append(f"{sid} is the id of two scenes")
+        t = str(sc.get("type") or "still").strip().lower()
+        if t not in SCENE_TYPES:
+            problems.append(f"{sid}: type must be one of {', '.join(SCENE_TYPES)}")
+            continue
+        cam = str(sc.get("camera") or "").strip().lower()
+        if cam not in CAMERAS:
+            if cam and t in ("still", "reuse"):
+                notes.append(f"{sid}: unknown camera \"{cam}\", used {CAMERAS[len(scenes) % 4]}")
+            cam = CAMERAS[len(scenes) % 4] if t in ("still", "reuse") else "push_in"
+        item = {"id": sid, "part": part, "beats": bl, "type": t, "visual": str(sc.get("visual") or "").strip(),
+                "camera": cam, "onscreen": str(sc.get("onscreen") or "").strip()}
+        if t in ("still", "motion"):
+            core = str(sc.get("mj_prompt") or "").strip().rstrip(".")
+            full = str(sc.get("mj_full") or "").strip()
+            if not (core or full):
+                problems.append(f"{sid}: a {t} scene needs an mj_prompt")
+            item["mj_prompt"] = core or full
+            item["mj_full"] = full or mj_full(core)
+        if t == "motion":
+            item["kling_prompt"] = str(sc.get("kling_prompt") or "").strip()
+            if not item["kling_prompt"]:
+                problems.append(f"{sid}: a motion scene needs a kling_prompt")
+        if t == "card":
+            c = sc["card"] if isinstance(sc.get("card"), dict) else {
+                "kind": sc.get("card_kind"), "text": sc.get("card_text"), "sub": sc.get("card_sub"),
+                "items": sc.get("card_items"), "tone": sc.get("card_tone")}
+            card = {"kind": str(c.get("kind") or "").strip().lower(), "text": str(c.get("text") or "").strip(),
+                    "sub": str(c.get("sub") or "").strip(), "items": _strings(c.get("items")),
+                    "tone": str(c.get("tone") or "neutral").strip().lower()}
+            if card["kind"] not in CARD_KINDS:
+                problems.append(f"{sid}: the card kind must be one of {', '.join(CARD_KINDS)}")
+            elif not (card["text"] or card["items"]):
+                problems.append(f"{sid}: the card has no text")
+            elif card["kind"] == "compare" and len(card["items"]) != 2:
+                problems.append(f"{sid}: a compare card needs exactly 2 items, each \"Label: value\"")
+            if card["tone"] not in TONES:
+                notes.append(f"{sid}: unknown card tone \"{card['tone']}\", used neutral")
+                card["tone"] = "neutral"
+            item["card"] = card
+        if t == "reuse":
+            ref = _scene_ref(sc.get("reuse_of"), part)
+            src = next((x for x in scenes if x["id"] == ref), None)
+            if not src or src["type"] not in ("still", "motion"):
+                problems.append(f"{sid}: reuse_of must be the id of an earlier still or motion scene")
+            item["reuse_of"] = ref
+        scenes.append(item)
+    want = [b["id"] for b in beats]
+    if covered != want and beats_ok:
+        seen = {}
+        for x in covered:
+            seen[x] = seen.get(x, 0) + 1
+        missing = [x for x in want if x not in seen]
+        twice = [x for x, n in seen.items() if n > 1]
+        if missing:
+            problems.append(f"beats that are in no scene: {_beat_list(missing)}")
+        if twice:
+            problems.append(f"beats that are in more than one scene: {_beat_list(twice)}")
+        if not missing and not twice:
+            at = next(i for i, (a, b) in enumerate(zip(covered, want)) if a != b)
+            problems.append(f"the scenes are not in script order (around B{want[at]}); list them in the order of the script")
+    if problems:
+        _stop(video.shotlist.name, problems, hint)
+    lim = cfg()["shotlist"]
+    n_img = sum(1 for x in scenes if x["type"] in ("still", "motion"))
+    n_mot = sum(1 for x in scenes if x["type"] == "motion")
+    if n_img > lim["max_images"]:
+        notes.append(f"{n_img} scenes need a new image; config.yaml plans for at most {lim['max_images']}")
+    if n_mot > lim["max_motion"]:
+        notes.append(f"{n_mot} scenes need a Kling clip; config.yaml plans for at most {lim['max_motion']}")
+    long = [x["id"] for x in scenes if sum(by_id[b]["w1"] - by_id[b]["w0"] for b in x["beats"]) > 32]
+    if long:
+        notes.append(f"{len(long)} scenes hold more than 32 words (over about 12 seconds on screen): "
+                     f"{', '.join(long[:8])}{' ...' if len(long) > 8 else ''}")
+    out = {"version": 1, "script_hash": script_hash(video), "made_by": "hand",
+           "parts": [{"n": p["n"], "title": p["title"]} for p in s.parts], "beats": beats, "scenes": scenes}
+    backup(video.shotlist)
+    write_json(video.shotlist, out)
+    write_text(video.prompts_md, prompts_sheet(out))
+    for n in notes:
+        warn(n)
+    counts = {t: sum(1 for x in scenes if x["type"] == t) for t in SCENE_TYPES}
+    say(f"shotlist: took the hand-made shot list: {len(scenes)} scenes for {len(beats)} beats - {counts['still']} stills, "
+        f"{counts['motion']} motion, {counts['card']} cards, {counts['reuse']} reused -> {video.prompts_md.name}")
+
+
+def adopt_package(video, data):
+    """Check a hand-made package, fit its Shorts to 60-150 words and add the full thumbnail prompt."""
+    s, beats = script_beats(video)
+    cur = script_hash(video)
+    if data.get("script_hash") == cur and data.get("made_by") == "hand":
+        say(f"package: already done (written by hand; vp package {video.slug} --force has Claude redo it)")
+        return
+    problems, shorts = [], []
+    titles = _strings(data.get("titles"))
+    if not titles:
+        problems.append("titles: give at least one title")
+    description = str(data.get("description") or "").strip()
+    if not description:
+        problems.append("description is empty")
+    raw = data.get("shorts") or []
+    for i, sh in enumerate(raw if isinstance(raw, list) else [], 1):
+        a = sh.get("beat_from") if isinstance(sh, dict) else None
+        z = sh.get("beat_to") if isinstance(sh, dict) else None
+        if not all(isinstance(x, int) and not isinstance(x, bool) and 1 <= x <= len(beats) for x in (a, z)):
+            problems.append(f"short {i}: beat_from and beat_to must be beat numbers between 1 and {len(beats)}")
+            continue
+        shorts.append({"title": str(sh.get("title") or "").strip() or f"Short {i}", "hook": str(sh.get("hook") or "").strip(),
+                       "beat_from": min(a, z), "beat_to": max(a, z), "why": str(sh.get("why") or "").strip()})
+    if problems:
+        _stop(video.package.name, problems, "Fix them and run this again. " + BEATS_HELP.format(slug=video.slug))
+    fixed = fix_shorts(shorts, beats)
+    moved = [str(i) for i, (a, b) in enumerate(zip(shorts, fixed), 1)
+             if (a["beat_from"], a["beat_to"]) != (b["beat_from"], b["beat_to"])]
+    stale = bool(data.get("script_hash")) and data["script_hash"] != cur
+    tp = str(data.get("thumbnail_prompt") or "").strip()
+    out = dict(data, titles=titles, thumbnail_texts=_strings(data.get("thumbnail_texts")), thumbnail_prompt=tp,
+               description=description, tags=_strings(data.get("tags")), hashtags=_strings(data.get("hashtags")),
+               shorts=fixed, pinned_comment=str(data.get("pinned_comment") or "").strip(),
+               thumbnail_full=str(data.get("thumbnail_full") or "").strip() or (mj_full(tp) if tp else ""),
+               script_hash=cur, made_by="hand")
+    backup(video.package)
+    write_json(video.package, out)
+    if stale:
+        warn("the script changed after the hand-made package was taken; check the Shorts beat ranges in "
+             f"{video.package_md.name} (or run vp package {video.slug} --force to have Claude redo the package)")
+    if moved:
+        warn(f"Shorts {', '.join(moved)}: beat range adjusted to hold 60-150 words of narration")
+    say(f"package: took the hand-made package: {len(titles)} titles, {len(fixed)} Shorts -> {video.package_md.name}")
+
+
+def adopt_handmade(video):
+    """Before a step that reads the shot list or package (board, sort, cut, shorts, thumb, timing)."""
+    if not video.script.exists():
+        return
+    shot = read_json(video.shotlist, {})
+    if shot and not shot.get("script_hash"):
+        adopt_shotlist(video, shot)
+    pkg = read_json(video.package, {})
+    if pkg and not pkg.get("script_hash"):
+        adopt_package(video, pkg)
+        render_package_md(video)

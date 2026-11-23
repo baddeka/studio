@@ -13,7 +13,7 @@ It takes 2 to 5 minutes and does this, skipping anything that is already there:
 3. Checks ffmpeg in `tools\ffmpeg\bin`. If it is missing, it downloads the gyan.dev "essentials" build and checks its checksum.
 4. Checks the fonts in `library\fonts` (they come with the folder; missing ones are downloaded from Google Fonts).
 5. Creates `.env` from `.env.example`. An existing `.env` is never touched.
-6. Runs `vp doctor`, the unit tests and `vp selftest`, which renders a 40-second test video (draft, full cut, music, captions, DaVinci timeline, a Short, thumbnails) and checks 32 things about it.
+6. Runs `vp doctor`, the unit tests and `vp selftest`, which renders a 40-second test video (draft, full cut, music, captions, DaVinci timeline, a Short, thumbnails) and checks 33 things about it.
 
 It ends with **Setup finished. Everything works.** If it lists problems instead, fix them and run `setup.cmd` again.
 

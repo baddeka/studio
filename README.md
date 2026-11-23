@@ -35,7 +35,7 @@ All commands run from this folder in PowerShell, as `.\vp <command>` (in Command
 | voice | `audio\voice.wav`, `audio\words.json` | listen once; every word is timed |
 | cut | `edit\draft.mp4` | a quick low-resolution cut with grey placeholders for missing images |
 
-Then make the images:
+Files written by hand, for example by Claude in the project chat, go in the same folder: `01_research.md`, `02_script.md`, `03_factcheck.md`, `04_shotlist.json`, `05_package.json`. `run` checks them against the script and takes them over without sending them to Claude again. FORMAT.md describes each file. Then make the images:
 
 ```powershell
 .\vp board ftx
@@ -76,6 +76,7 @@ File, Import, Timeline, then pick `edit\timeline.fcpxml`. Every scene is its own
 | `.\vp run <slug> [--until step]` | every automatic step in order |
 | `.\vp research / script / factcheck --fix / shotlist / package <slug>` | one step; add `--force` to redo it |
 | `.\vp shotlist <slug> --part 4` | redo the scenes of one part only; other parts keep their images |
+| `.\vp beats <slug> [--json]` | the script's numbered beats, for writing a shot list or Shorts by hand (FORMAT.md) |
 | `.\vp voice <slug> [--engine sapi] [--file my.mp3]` | voice-over; `--file` times your own recording (exactly with an ElevenLabs key, closely from its pauses without one) |
 | `.\vp board <slug>` / `.\vp sort <slug>` | add images and clips |
 | `.\vp cut <slug> [--draft]` | render the cut |

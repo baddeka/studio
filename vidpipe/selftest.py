@@ -19,7 +19,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 
 from .config import ROOT, VIDEOS, Video, cfg, ffmpeg_bin, font_path
-from .util import read_json, run, say, warn, write_json, write_text
+from .util import read_json, run, say, write_json, write_text
 
 SLUG = "_selftest"
 
@@ -229,7 +229,6 @@ def fake_music(path, seconds=24.0):
 
 def make_inputs(video):
     """Script, voice-over with word timings, shot list, package, images (one left out), one clip and music."""
-    from .content import mj_full, script_hash
     from .textutil import Script
     from .voice import stitch, write_wav
     write_text(video.dir / "video.yaml", "topic: Self-test video\nangle: ''\nnotes: ''\nwords: 90\n")
@@ -261,7 +260,6 @@ def make_inputs(video):
                     "onscreen": extra.get("onscreen", "")}
             if kind in ("still", "motion"):
                 item["mj_prompt"] = "a dark empty office at night, a single desk lamp"
-                item["mj_full"] = mj_full(item["mj_prompt"])
             if kind == "motion":
                 item["kling_prompt"] = "slow push in, dust drifting in the lamp light"
             if kind == "card":
@@ -269,8 +267,9 @@ def make_inputs(video):
             if kind == "reuse":
                 item["reuse_of"] = f"S{n}-01"
             scenes.append(item)
-    shot = {"version": 1, "script_hash": script_hash(video),
-            "parts": [{"n": p["n"], "title": p["title"]} for p in s.parts], "beats": beats, "scenes": scenes}
+    # Written the way a hand-made shot list and package arrive (FORMAT.md: no script_hash, no full Midjourney
+    # prompts), so the self-test also checks that the pipeline takes them over.
+    shot = {"version": 1, "beats": beats, "scenes": scenes}
     write_json(video.shotlist, shot)
 
     last_of_part2 = max((b["id"] for b in beats if b["part"] == 2), default=beats[-1]["id"])
@@ -278,14 +277,12 @@ def make_inputs(video):
         "titles": ["The Vanishing Fund (self-test)"],
         "thumbnail_texts": ["$400M gone", "Who was the auditor?"],
         "thumbnail_prompt": "a dark empty office at night",
-        "thumbnail_full": mj_full("a dark empty office at night"),
         "description": "Self-test video made by vp selftest.",
         "tags": ["selftest"],
         "hashtags": ["#selftest"],
         "shorts": [{"title": "Self-test short", "hook": "$400 million, gone", "beat_from": beats[0]["id"],
                     "beat_to": last_of_part2, "why": "self-test"}],
         "pinned_comment": "Sources: none, this is a self-test.",
-        "script_hash": script_hash(video),
     })
 
     images = video.assets("images")
@@ -395,6 +392,7 @@ class _Stop(Exception):
 
 
 def selftest(keep=False, workers=None):
+    from .content import adopt_handmade, script_hash
     from .cut import build_cut
     from .shorts import build_shorts
     from .thumbnail import build_thumbnails
@@ -419,6 +417,14 @@ def selftest(keep=False, workers=None):
             kinds = sorted({s["type"] for s in shot["scenes"]})
             r.check("test inputs", (video.words.exists() and len(read_json(video.words)["words"]) == shot["beats"][-1]["w1"]),
                     f"{n} scenes ({', '.join(kinds)}), {len(read_json(video.words)['words'])} timed words")
+
+            _step(r, "Taking over the hand-made shot list and package", lambda: adopt_handmade(video), timings)
+            shot, pkg = read_json(video.shotlist), read_json(video.package)
+            r.check("hand-made shot list and package taken over",
+                    shot.get("made_by") == pkg.get("made_by") == "hand" and shot.get("script_hash") == script_hash(video)
+                    and all(s.get("mj_full") for s in shot["scenes"] if s["type"] in ("still", "motion"))
+                    and bool(pkg.get("thumbnail_full")),
+                    f"{len(shot['scenes'])} scenes, {len(pkg['shorts'])} Short, prompts in {video.prompts_md.name}")
 
             _step(r, "Draft cut (one image left out on purpose)",
                   lambda: build_cut(video, draft=True, workers=workers), timings)

@@ -8,13 +8,14 @@ Double-click `setup.cmd` (INSTALL.md). It makes `.venv`, installs `requirements.
 
 ## Tested in the cloud (Linux, Python 3.14, ffmpeg 6.1)
 
-- `vp selftest`: makes a 40-second video offline (synthetic voice with exact character timings, all scene kinds, stand-in images and a clip, music), renders draft, full cut and one Short, and checks 32 things: formats, lengths, loudness, captions, FCPXML, placeholders, thumbnails. About 70 s on 4 cores.
+- `vp selftest`: makes a 40-second video offline (synthetic voice with exact character timings, all scene kinds, stand-in images and a clip, music), renders draft, full cut and one Short, and checks 33 things: formats, lengths, loudness, captions, FCPXML, placeholders, thumbnails. Its shot list and package are written the way hand-made ones arrive, so it also checks that they are taken over. About 75 s on 4 cores.
 - `setup.ps1` ran start to finish under PowerShell 7.7 on a clean copy (fonts deleted on purpose): venv, packages, font download, `.env`, doctor, tests, selftest. Not exercised here: the gyan.dev ffmpeg download (blocked from the cloud) and winget. The script avoids PowerShell 7-only syntax and is ASCII, so Windows PowerShell 5.1 reads it.
 - End to end on `videos/ponzi-test` (3.1 min, 36 scenes, real Claude outputs from the laptop, SAPI voice): `vp run` with one image missing makes the draft with a placeholder; `vp sort` placed a Midjourney-named download by prompt match; the scene board page uploaded an image through its own JS; `vp run` then rendered the 1080p cut, 4 Shorts and 3 thumbnails in 5.5 min on 4 cores; a second `vp cut` re-used every segment (31 s).
 - Audio: -14.2 LUFS integrated, -1.7 dBTP peak, voice and picture in sync (0 ms by cross-correlation), music ducks under the voice.
 - `timeline.fcpxml` (version 1.8, file URLs with spaces and `&` escaped) parsed by OpenTimelineIO and valid against Apple's DTD. Importing it into DaVinci Resolve itself was not possible in the cloud.
 - `vp voice --file` with an mp3 and no ElevenLabs key: word starts within 0.17 s on average of the real timing (sentence ends pinned to pauses, numbers weighted by how long they take to say). With a key, ElevenLabs forced alignment is used as before.
-- 21 unit tests pass (`python -m unittest discover -s tests`). The mock ElevenLabs test no longer depends on request order.
+- 28 unit tests pass (`python -m unittest discover -s tests`). The mock ElevenLabs test no longer depends on request order.
+- Hand-made files (tests/test_handmade.py): `vp run --until package` on a folder with hand-written research, script, fact-check, shot list and package takes all of them over without calling Claude (the test replaces Claude with a function that fails). After a small script edit, both files are still kept.
 
 ## What changed from the laptop build
 
@@ -23,7 +24,8 @@ Double-click `setup.cmd` (INSTALL.md). It makes `.venv`, installs `requirements.
 - cards: feathered shades behind chapter titles and lower thirds; in Shorts, card content is fitted between the hook line and the captions; draft placeholders sit below the chapter title.
 - Shorts captions: larger Anton with outline, groups of up to 18 characters, no line overflow.
 - board: POSTs need the `X-VP-Board` header and every request must use a local host name, so other web pages cannot change files.
-- New commands: `vp selftest`, `vp clean <slug> [--all]`; `vp doctor` checks ffmpeg's encoders and filters (libx264, aac, ass, loudnorm, alimiter, ...).
+- New commands: `vp selftest`, `vp clean <slug> [--all]`, `vp beats <slug> [--json]`; `vp doctor` checks ffmpeg's encoders and filters (libx264, aac, ass, loudnorm, alimiter, ...).
+- Hand-made files (FORMAT.md): a shot list or package without `script_hash` is checked against the script and taken over (`content.adopt_shotlist`, `adopt_package`). Missing `mj_full`, `parts`, ids and cameras are filled in. Problems stop the run with a list, and the file is never redone by Claude. A hand-written dossier gets its `sources.json` and link check. A hand-made package is kept when the script changes, and the Shorts ranges are re-fitted with a warning. `python -m vidpipe.beats` numbers a script's beats with nothing but Python, for writing these files outside the laptop.
 - Windows: `setup.cmd` + `setup.ps1`, `requirements.txt`, `vp.cmd` uses `.venv` first, then `py -3`, then `python`.
 
 ## Not tested anywhere yet

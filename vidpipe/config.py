@@ -179,7 +179,7 @@ class Video:
     @property
     def meta(self):
         p = self.dir / "video.yaml"
-        return yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+        return (yaml.safe_load(p.read_text(encoding="utf-8")) or {}) if p.exists() else {}
 
     def save_meta(self, meta):
         (self.dir / "video.yaml").write_text(yaml.safe_dump(meta, sort_keys=False, allow_unicode=True), encoding="utf-8")

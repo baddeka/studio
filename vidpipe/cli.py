@@ -1,6 +1,5 @@
 import argparse
 import re
-import sys
 
 import yaml
 
@@ -38,6 +37,14 @@ def cmd_factcheck(a):
 def cmd_shotlist(a):
     from .content import shotlist
     shotlist(Video(a.slug), force=a.force, only_part=a.part)
+
+
+def cmd_beats(a):
+    from .beats import main as beats_main
+    v = Video(a.slug)
+    if not v.script.exists():
+        raise SystemExit(f"No script yet: put it in videos/{v.slug}/02_script.md")
+    return beats_main([str(v.script)] + (["--json"] if a.json else []))
 
 
 def cmd_package(a):
@@ -125,7 +132,9 @@ def cmd_run(a):
         shotlist(v)
     if last >= 4:
         pkg = read_json(v.package)
-        package(v, force=bool(pkg) and pkg.get("script_hash") != script_hash(v))
+        # A package Claude made is redone when the script changes; a hand-made one is kept and only re-checked.
+        stale = bool(pkg) and bool(pkg.get("script_hash")) and pkg["script_hash"] != script_hash(v)
+        package(v, force=stale and pkg.get("made_by") != "hand")
     if last >= 5:
         from .voice import make_voice
         words = read_json(v.words)
@@ -173,7 +182,11 @@ def cmd_status(a):
         f"{sum(1 for c in fc['claims'] if c['verdict'] != 'supported')} flagged of {len(fc['claims'])}" if fc else "")
     shot = read_json(v.shotlist)
     if shot:
-        stale = " (STALE: script changed)" if shot["script_hash"] != cur else ""
+        if not shot.get("script_hash"):
+            stale = " (written by hand; checked on the next vp run)"
+        else:
+            stale = (" (STALE: script changed)" if shot["script_hash"] != cur else "") + \
+                (" (written by hand)" if shot.get("made_by") == "hand" else "")
         types = {}
         for s in shot["scenes"]:
             types[s["type"]] = types.get(s["type"], 0) + 1
@@ -181,7 +194,12 @@ def cmd_status(a):
     else:
         row("shotlist", False, "")
     pkg = read_json(v.package)
-    row("package", bool(pkg), f"{len(pkg['shorts'])} shorts" if pkg else "")
+    info = ""
+    if pkg:
+        info = f"{len(pkg.get('shorts') or [])} shorts"
+        if pkg.get("made_by") == "hand" or not pkg.get("script_hash"):
+            info += " (written by hand)"
+    row("package", bool(pkg), info)
     words = read_json(v.words)
     if words:
         stale = " (STALE: script changed)" if words["script_hash"] != cur else ""
@@ -272,6 +290,8 @@ def build_parser():
     sp.add_argument("--force", action="store_true")
     sp.add_argument("--part", type=int)
     add("package", cmd_package, "titles, thumbnail text, description, tags, Shorts moments").add_argument("--force", action="store_true")
+    add("beats", cmd_beats, "the script's numbered beats, for writing a shot list or Shorts by hand").add_argument(
+        "--json", action="store_true", help="print them as JSON for 04_shotlist.json")
     sp = add("voice", cmd_voice, "voice-over with word timings")
     sp.add_argument("--engine", choices=["elevenlabs", "sapi", "file"])
     sp.add_argument("--file", help="use your own recording (mp3/wav)")
@@ -309,6 +329,9 @@ def main(argv=None):
     ensure_utf8_console()
     args = build_parser().parse_args(argv)
     try:
+        if args.fn in (cmd_board, cmd_sort, cmd_cut, cmd_shorts, cmd_thumb, cmd_timing):
+            from .content import adopt_handmade
+            adopt_handmade(Video(args.slug))
         return args.fn(args) or 0
     except KeyboardInterrupt:
         warn("stopped")
