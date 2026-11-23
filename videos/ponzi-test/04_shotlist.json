@@ -1,0 +1,922 @@
+{
+  "version": 1,
+  "script_hash": "ff1938ee33b6",
+  "parts": [
+    {
+      "n": 1,
+      "title": "The line"
+    },
+    {
+      "n": 2,
+      "title": "A coupon from Spain"
+    },
+    {
+      "n": 3,
+      "title": "Cash to the ceiling"
+    },
+    {
+      "n": 4,
+      "title": "A winding staircase"
+    },
+    {
+      "n": 5,
+      "title": "The run"
+    },
+    {
+      "n": 6,
+      "title": "The bill"
+    },
+    {
+      "n": 7,
+      "title": "Whose money"
+    }
+  ],
+  "beats": [
+    {
+      "id": 1,
+      "part": 1,
+      "para": 0,
+      "w0": 0,
+      "w1": 3,
+      "text": "Boston, July 1920."
+    },
+    {
+      "id": 2,
+      "part": 1,
+      "para": 0,
+      "w0": 3,
+      "w1": 11,
+      "text": "A line stretches more than half a mile."
+    },
+    {
+      "id": 3,
+      "part": 1,
+      "para": 0,
+      "w0": 11,
+      "w1": 21,
+      "text": "In three days, $1.7 million leaves one man's bank account."
+    },
+    {
+      "id": 4,
+      "part": 1,
+      "para": 0,
+      "w0": 21,
+      "w1": 27,
+      "text": "Where was it all coming from?"
+    },
+    {
+      "id": 5,
+      "part": 2,
+      "para": 1,
+      "w0": 27,
+      "w1": 30,
+      "text": "In August 1919,"
+    },
+    {
+      "id": 6,
+      "part": 2,
+      "para": 1,
+      "w0": 30,
+      "w1": 44,
+      "text": "Italian immigrant Charles Ponzi found an international reply coupon in a letter from Spain."
+    },
+    {
+      "id": 7,
+      "part": 2,
+      "para": 1,
+      "w0": 44,
+      "w1": 54,
+      "text": "He claimed he could buy the coupons cheaply in Europe"
+    },
+    {
+      "id": 8,
+      "part": 2,
+      "para": 1,
+      "w0": 54,
+      "w1": 61,
+      "text": "and redeem them in America for more."
+    },
+    {
+      "id": 9,
+      "part": 2,
+      "para": 1,
+      "w0": 61,
+      "w1": 69,
+      "text": "His notes promised fifty percent in ninety days."
+    },
+    {
+      "id": 10,
+      "part": 2,
+      "para": 1,
+      "w0": 69,
+      "w1": 74,
+      "text": "He usually paid in forty-five."
+    },
+    {
+      "id": 11,
+      "part": 3,
+      "para": 2,
+      "w0": 74,
+      "w1": 81,
+      "text": "He began in December 1919 with $150."
+    },
+    {
+      "id": 12,
+      "part": 3,
+      "para": 2,
+      "w0": 81,
+      "w1": 92,
+      "text": "In June 1920 alone, 7,824 people paid in about $2.5 million."
+    },
+    {
+      "id": 13,
+      "part": 3,
+      "para": 2,
+      "w0": 92,
+      "w1": 101,
+      "text": "Sixteen clerks stacked cash in closets to the ceiling."
+    },
+    {
+      "id": 14,
+      "part": 3,
+      "para": 2,
+      "w0": 101,
+      "w1": 110,
+      "text": "Even his lawyer, a juvenile court judge, invested $5,400."
+    },
+    {
+      "id": 15,
+      "part": 3,
+      "para": 3,
+      "w0": 110,
+      "w1": 120,
+      "text": "On 24 July, he made the Boston Post's front page."
+    },
+    {
+      "id": 16,
+      "part": 3,
+      "para": 3,
+      "w0": 120,
+      "w1": 128,
+      "text": "The day before, he had hired a publicist."
+    },
+    {
+      "id": 17,
+      "part": 4,
+      "para": 4,
+      "w0": 128,
+      "w1": 137,
+      "text": "In the Post, financial publisher Clarence Barron was blunt:"
+    },
+    {
+      "id": 18,
+      "part": 4,
+      "para": 4,
+      "w0": 137,
+      "w1": 148,
+      "text": "\"No man of wide financial or investment experience would look twice.\""
+    },
+    {
+      "id": 19,
+      "part": 4,
+      "para": 4,
+      "w0": 148,
+      "w1": 152,
+      "text": "His biographer, Mitchell Zuckoff,"
+    },
+    {
+      "id": 20,
+      "part": 4,
+      "para": 4,
+      "w0": 152,
+      "w1": 166,
+      "text": "notes there were never enough coupons in the world to carry that much money."
+    },
+    {
+      "id": 21,
+      "part": 4,
+      "para": 4,
+      "w0": 166,
+      "w1": 170,
+      "text": "His publicist, William McMasters,"
+    },
+    {
+      "id": 22,
+      "part": 4,
+      "para": 4,
+      "w0": 170,
+      "w1": 184,
+      "text": "told the Post's acting publisher that Ponzi was \"as crooked as a winding staircase.\""
+    },
+    {
+      "id": 23,
+      "part": 5,
+      "para": 5,
+      "w0": 184,
+      "w1": 197,
+      "text": "On 26 July, after a three-hour grilling, Ponzi agreed to stop taking money."
+    },
+    {
+      "id": 24,
+      "part": 5,
+      "para": 5,
+      "w0": 197,
+      "w1": 206,
+      "text": "That day, $572,000 left his account at Hanover Trust."
+    },
+    {
+      "id": 25,
+      "part": 5,
+      "para": 5,
+      "w0": 206,
+      "w1": 208,
+      "text": "Then $228,000."
+    },
+    {
+      "id": 26,
+      "part": 5,
+      "para": 5,
+      "w0": 208,
+      "w1": 210,
+      "text": "Then $905,000."
+    },
+    {
+      "id": 27,
+      "part": 5,
+      "para": 6,
+      "w0": 210,
+      "w1": 222,
+      "text": "On 2 August, the Post printed McMasters's verdict: Ponzi was hopelessly insolvent."
+    },
+    {
+      "id": 28,
+      "part": 5,
+      "para": 6,
+      "w0": 222,
+      "w1": 237,
+      "text": "On 9 August, his account was $331,000 overdrawn, and a creditor filed a bankruptcy petition."
+    },
+    {
+      "id": 29,
+      "part": 5,
+      "para": 6,
+      "w0": 237,
+      "w1": 252,
+      "text": "Two days later, the Post revealed he had served jail time in Montreal for forgery,"
+    },
+    {
+      "id": 30,
+      "part": 5,
+      "para": 6,
+      "w0": 252,
+      "w1": 256,
+      "text": "under the name Ponsi."
+    },
+    {
+      "id": 31,
+      "part": 5,
+      "para": 7,
+      "w0": 256,
+      "w1": 268,
+      "text": "Ponzi told reporter Herbert Baldwin: \"You did a fine job on me.\""
+    },
+    {
+      "id": 32,
+      "part": 5,
+      "para": 7,
+      "w0": 268,
+      "w1": 274,
+      "text": "Within days, he was under arrest."
+    },
+    {
+      "id": 33,
+      "part": 6,
+      "para": 8,
+      "w0": 274,
+      "w1": 285,
+      "text": "He pleaded guilty to federal mail fraud and got five years."
+    },
+    {
+      "id": 34,
+      "part": 6,
+      "para": 8,
+      "w0": 285,
+      "w1": 294,
+      "text": "In 1925, a state jury convicted him of larceny."
+    },
+    {
+      "id": 35,
+      "part": 6,
+      "para": 8,
+      "w0": 294,
+      "w1": 307,
+      "text": "Even investors paid out in the final days had to give it back."
+    },
+    {
+      "id": 36,
+      "part": 6,
+      "para": 9,
+      "w0": 307,
+      "w1": 322,
+      "text": "Noteholders recovered, by different estimates, twelve to thirty-seven and a half cents on the dollar."
+    },
+    {
+      "id": 37,
+      "part": 6,
+      "para": 9,
+      "w0": 322,
+      "w1": 332,
+      "text": "Ponzi died in a Rio charity ward in January 1949."
+    },
+    {
+      "id": 38,
+      "part": 7,
+      "para": 10,
+      "w0": 332,
+      "w1": 336,
+      "text": "The signs were there."
+    },
+    {
+      "id": 39,
+      "part": 7,
+      "para": 10,
+      "w0": 336,
+      "w1": 343,
+      "text": "A return no real trade could produce."
+    },
+    {
+      "id": 40,
+      "part": 7,
+      "para": 10,
+      "w0": 343,
+      "w1": 351,
+      "text": "A founder who sued the newspaper asking questions."
+    },
+    {
+      "id": 41,
+      "part": 7,
+      "para": 10,
+      "w0": 351,
+      "w1": 362,
+      "text": "And early payouts, which proved only that new money was arriving."
+    },
+    {
+      "id": 42,
+      "part": 7,
+      "para": 11,
+      "w0": 362,
+      "w1": 369,
+      "text": "The question was never whether it paid."
+    },
+    {
+      "id": 43,
+      "part": 7,
+      "para": 11,
+      "w0": 369,
+      "w1": 374,
+      "text": "It was who was paying."
+    }
+  ],
+  "scenes": [
+    {
+      "id": "S1-01",
+      "part": 1,
+      "beats": [
+        1,
+        2
+      ],
+      "type": "motion",
+      "visual": "Wide high shot of the Boston street: an endless line of silhouettes snakes out of a doorway and around the corner into the summer haze.",
+      "camera": "push_in",
+      "onscreen": "Boston - July 1920",
+      "mj_prompt": "High wide view of a narrow 1920 downtown Boston street, red-brick buildings, iron fire escapes, trolley wires, an endless line of dark silhouetted people in boaters and cloche hats snaking from a doorway around the corner, hazy gold afternoon light, ominous stillness",
+      "mj_full": "High wide view of a narrow 1920 downtown Boston street, red-brick buildings, iron fire escapes, trolley wires, an endless line of dark silhouetted people in boaters and cloche hats snaking from a doorway around the corner, hazy gold afternoon light, ominous stillness, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw",
+      "kling_prompt": "Slow drone-like dolly forward along the line, dust drifting in hazy light, figures shifting slightly in place"
+    },
+    {
+      "id": "S1-02",
+      "part": 1,
+      "beats": [
+        3
+      ],
+      "type": "card",
+      "visual": "Stat card: $1.7 million withdrawn in three days.",
+      "camera": "push_in",
+      "onscreen": "",
+      "card": {
+        "kind": "stat",
+        "text": "$1,700,000",
+        "sub": "Left one man's bank account in three days",
+        "items": [],
+        "tone": "loss"
+      }
+    },
+    {
+      "id": "S1-03",
+      "part": 1,
+      "beats": [
+        4
+      ],
+      "type": "still",
+      "visual": "The promoter, faceless in silhouette against a tall window, stands in the dim office before open closets stacked with banknotes to the ceiling.",
+      "camera": "push_in",
+      "onscreen": "",
+      "mj_prompt": "Cramped 1920 upstairs office, a short slight man in a pale three-piece suit and straw boater seen from behind in silhouette against a tall window, open wooden closets stacked to the ceiling with bundled banknotes, gold glint on his cane tip, corners in near-black",
+      "mj_full": "Cramped 1920 upstairs office, a short slight man in a pale three-piece suit and straw boater seen from behind in silhouette against a tall window, open wooden closets stacked to the ceiling with bundled banknotes, gold glint on his cane tip, corners in near-black, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw"
+    },
+    {
+      "id": "S2-01",
+      "part": 2,
+      "beats": [
+        5,
+        6
+      ],
+      "type": "motion",
+      "visual": "The faceless promoter at his desk lifts a small glowing postal coupon from an opened foreign envelope.",
+      "camera": "push_in",
+      "onscreen": "August 1919",
+      "mj_prompt": "Faceless 1920s man in pale three-piece summer suit and straw boater, face in shadow, seated at a dark wooden desk, holding a small ornately engraved postal coupon glowing faint gold beside an opened foreign envelope, single brass lamp, near-black room",
+      "mj_full": "Faceless 1920s man in pale three-piece summer suit and straw boater, face in shadow, seated at a dark wooden desk, holding a small ornately engraved postal coupon glowing faint gold beside an opened foreign envelope, single brass lamp, near-black room, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw",
+      "kling_prompt": "Slow dolly in toward the coupon, lamp light flickering gently, dust drifting through the beam"
+    },
+    {
+      "id": "S2-02",
+      "part": 2,
+      "beats": [
+        7
+      ],
+      "type": "still",
+      "visual": "A tiny gold coupon slides across a worn European post office counter, cheap coins beside it.",
+      "camera": "push_in",
+      "onscreen": "",
+      "mj_prompt": "Close view of a worn 1920 European post office counter, small engraved postal coupon glowing gold pushed across the wood beside a few small coins, iron grille above, dim sepia light, deep shadows, quiet atmosphere",
+      "mj_full": "Close view of a worn 1920 European post office counter, small engraved postal coupon glowing gold pushed across the wood beside a few small coins, iron grille above, dim sepia light, deep shadows, quiet atmosphere, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw"
+    },
+    {
+      "id": "S2-03",
+      "part": 2,
+      "beats": [
+        8
+      ],
+      "type": "still",
+      "visual": "Across a dark ocean, the same coupon sits beside a taller stack of stamps on an American counter.",
+      "camera": "pan_right",
+      "onscreen": "",
+      "mj_prompt": "Split composition of a dark Atlantic ocean horizon at night with a steamship's faint lights, foreground a 1920 American post office counter where a single glowing gold coupon sits beside a taller stack of postage stamps, warm lamp light, near-black surroundings",
+      "mj_full": "Split composition of a dark Atlantic ocean horizon at night with a steamship's faint lights, foreground a 1920 American post office counter where a single glowing gold coupon sits beside a taller stack of postage stamps, warm lamp light, near-black surroundings, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw"
+    },
+    {
+      "id": "S2-04",
+      "part": 2,
+      "beats": [
+        9
+      ],
+      "type": "card",
+      "visual": "Stat card: 50% promised in ninety days.",
+      "camera": "push_in",
+      "onscreen": "",
+      "card": {
+        "kind": "stat",
+        "text": "50%",
+        "sub": "Promised return in ninety days",
+        "items": [],
+        "tone": "alert"
+      }
+    },
+    {
+      "id": "S2-05",
+      "part": 2,
+      "beats": [
+        10
+      ],
+      "type": "still",
+      "visual": "A stack of cream promissory notes, top one stamped, with cash laid on top under gold lamp light.",
+      "camera": "pull_out",
+      "onscreen": "",
+      "mj_prompt": "Stack of cream 1920 promissory note certificates with elegant copperplate script and illegible signature flourish, top note stamped, bundled green-gold banknotes laid across it, brass desk lamp casting warm gold pool, dark office corners",
+      "mj_full": "Stack of cream 1920 promissory note certificates with elegant copperplate script and illegible signature flourish, top note stamped, bundled green-gold banknotes laid across it, brass desk lamp casting warm gold pool, dark office corners, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw"
+    },
+    {
+      "id": "S3-01",
+      "part": 3,
+      "beats": [
+        11
+      ],
+      "type": "still",
+      "visual": "The promoter alone at a bare desk, seen from behind, a thin stack of banknotes under one lamp on a winter evening.",
+      "camera": "push_in",
+      "onscreen": "Boston - December 1919",
+      "mj_prompt": "A slight faceless man in a pale three-piece suit seen from behind at a small bare wooden desk, a thin stack of banknotes under a single brass lamp, frosted winter window, near-black room, gold glint on tie pin, quiet beginning",
+      "mj_full": "A slight faceless man in a pale three-piece suit seen from behind at a small bare wooden desk, a thin stack of banknotes under a single brass lamp, frosted winter window, near-black room, gold glint on tie pin, quiet beginning, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw"
+    },
+    {
+      "id": "S3-02",
+      "part": 3,
+      "beats": [
+        12
+      ],
+      "type": "card",
+      "visual": "Stat card: about $2.5 million paid in by 7,824 people in June 1920.",
+      "camera": "push_in",
+      "onscreen": "",
+      "card": {
+        "kind": "stat",
+        "text": "$2.5M",
+        "sub": "Paid in by 7,824 people in June 1920 alone",
+        "items": [],
+        "tone": "gain"
+      }
+    },
+    {
+      "id": "S3-03",
+      "part": 3,
+      "beats": [
+        13
+      ],
+      "type": "motion",
+      "visual": "The office: clerks in sleeve garters stacking bundled banknotes into tall closets filled to the ceiling.",
+      "camera": "push_in",
+      "onscreen": "",
+      "mj_prompt": "Cramped 1920 upstairs office, tall wooden closets with open doors packed floor to ceiling with bundled green-gold banknotes, clerks in sleeve garters on stepladders stacking more, brass lamp pools, dark wood partitions, corners in near-black",
+      "mj_full": "Cramped 1920 upstairs office, tall wooden closets with open doors packed floor to ceiling with bundled green-gold banknotes, clerks in sleeve garters on stepladders stacking more, brass lamp pools, dark wood partitions, corners in near-black, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw",
+      "kling_prompt": "Slow dolly in toward the closets; clerks reach up placing bundles, lamp light flickers softly, dust drifts in the light"
+    },
+    {
+      "id": "S3-04",
+      "part": 3,
+      "beats": [
+        14
+      ],
+      "type": "still",
+      "visual": "A black judge's robe hanging on a hook beside a desk where an envelope of cash rests on a promissory note.",
+      "camera": "pan_right",
+      "onscreen": "",
+      "mj_prompt": "A black judicial robe hanging on a brass coat hook in a dim wood-paneled 1920 office, beside it a desk with a cream promissory note in copperplate script and a fat envelope of banknotes, warm gold lamp light, ominous shadows",
+      "mj_full": "A black judicial robe hanging on a brass coat hook in a dim wood-paneled 1920 office, beside it a desk with a cream promissory note in copperplate script and a fat envelope of banknotes, warm gold lamp light, ominous shadows, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw"
+    },
+    {
+      "id": "S3-05",
+      "part": 3,
+      "beats": [
+        15
+      ],
+      "type": "card",
+      "visual": "Date card: July 24, 1920, the promoter makes the Boston Post front page.",
+      "camera": "push_in",
+      "onscreen": "",
+      "card": {
+        "kind": "date",
+        "text": "JULY 24, 1920",
+        "sub": "Ponzi makes the Boston Post's front page",
+        "items": [],
+        "tone": "neutral"
+      }
+    },
+    {
+      "id": "S3-06",
+      "part": 3,
+      "beats": [
+        16
+      ],
+      "type": "motion",
+      "visual": "The publicist in charcoal suit and fedora walks up a dark stair toward the promoter's lit office door.",
+      "camera": "push_in",
+      "onscreen": "Boston - July 23, 1920",
+      "mj_prompt": "A tall broad-shouldered faceless man in a charcoal suit and fedora, overcoat over one arm, folded newspaper in hand, climbing a dark wooden staircase toward a frosted glass office door glowing warm gold, 1920 building, deep shadows",
+      "mj_full": "A tall broad-shouldered faceless man in a charcoal suit and fedora, overcoat over one arm, folded newspaper in hand, climbing a dark wooden staircase toward a frosted glass office door glowing warm gold, 1920 building, deep shadows, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw",
+      "kling_prompt": "Slow upward tracking behind the man as he climbs; warm light spills from the door, dust motes drift"
+    },
+    {
+      "id": "S4-01",
+      "part": 4,
+      "beats": [
+        17
+      ],
+      "type": "still",
+      "visual": "Night newsroom: a heavyset silhouetted figure at a desk under a green lamp, marking up a financial page.",
+      "camera": "push_in",
+      "onscreen": "Boston - 1920",
+      "mj_prompt": "1920 newspaper office at night, a heavyset faceless man in a dark suit seen from behind at a desk under a green-shaded lamp, pen striking through a printed column, cigarette smoke, rotary press glowing behind glass, cold blue shadows, gold lamplight",
+      "mj_full": "1920 newspaper office at night, a heavyset faceless man in a dark suit seen from behind at a desk under a green-shaded lamp, pen striking through a printed column, cigarette smoke, rotary press glowing behind glass, cold blue shadows, gold lamplight, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw"
+    },
+    {
+      "id": "S4-02",
+      "part": 4,
+      "beats": [
+        18
+      ],
+      "type": "card",
+      "visual": "Quote card with Clarence Barron's verdict.",
+      "camera": "push_in",
+      "onscreen": "",
+      "card": {
+        "kind": "quote",
+        "text": "No man of wide financial or investment experience would look twice.",
+        "sub": "Clarence Barron, Boston Post, 1920",
+        "items": [],
+        "tone": "alert"
+      }
+    },
+    {
+      "id": "S4-03",
+      "part": 4,
+      "beats": [
+        19,
+        20
+      ],
+      "type": "motion",
+      "visual": "A single tiny glowing postal coupon dwarfed by a mountain of banknotes.",
+      "camera": "push_in",
+      "onscreen": "",
+      "mj_prompt": "A single small ornately engraved postal coupon glowing faintly gold on a dark wooden floor, dwarfed by a towering mountain of bundled 1920 banknotes in muted green-gold rising into darkness, low angle, dramatic single lamp, impossible scale",
+      "mj_full": "A single small ornately engraved postal coupon glowing faintly gold on a dark wooden floor, dwarfed by a towering mountain of bundled 1920 banknotes in muted green-gold rising into darkness, low angle, dramatic single lamp, impossible scale, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw",
+      "kling_prompt": "Slow crane up from the tiny coupon to the top of the banknote mountain, dust drifting in lamplight"
+    },
+    {
+      "id": "S4-04",
+      "part": 4,
+      "beats": [
+        21,
+        22
+      ],
+      "type": "motion",
+      "visual": "A dark spiral staircase seen from above, the publicist's tall silhouette descending into shadow.",
+      "camera": "push_in",
+      "onscreen": "",
+      "mj_prompt": "A dark wooden spiral staircase seen from directly above, coiling down into near-black depth, a tall broad-shouldered faceless man in charcoal suit and fedora descending with a folded newspaper, single warm gold lamp at the top, ominous",
+      "mj_full": "A dark wooden spiral staircase seen from directly above, coiling down into near-black depth, a tall broad-shouldered faceless man in charcoal suit and fedora descending with a folded newspaper, single warm gold lamp at the top, ominous, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw",
+      "kling_prompt": "Slow rotating descent down the spiral stairwell, the figure stepping downward, lamp light flickering faintly"
+    },
+    {
+      "id": "S5-01",
+      "part": 5,
+      "beats": [
+        23
+      ],
+      "type": "still",
+      "visual": "The promoter sits alone at his desk after the long hearing, boater set down, face in shadow.",
+      "camera": "push_in",
+      "onscreen": "Boston - July 1920",
+      "mj_prompt": "1920s upstairs office at dusk, a small slight man in a pale three-piece suit seated at a rolltop desk, seen from behind, straw boater and cane laid on the desk, gold tie pin glinting, single tall window, corners falling into near-black, weary stillness",
+      "mj_full": "1920s upstairs office at dusk, a small slight man in a pale three-piece suit seated at a rolltop desk, seen from behind, straw boater and cane laid on the desk, gold tie pin glinting, single tall window, corners falling into near-black, weary stillness, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw"
+    },
+    {
+      "id": "S5-02",
+      "part": 5,
+      "beats": [
+        24
+      ],
+      "type": "card",
+      "visual": "Stat card: $572,000 leaves the Hanover Trust account in one day.",
+      "camera": "push_in",
+      "onscreen": "",
+      "card": {
+        "kind": "stat",
+        "text": "$572,000",
+        "sub": "Left his Hanover Trust account on 26 July",
+        "items": [],
+        "tone": "loss"
+      }
+    },
+    {
+      "id": "S5-03",
+      "part": 5,
+      "beats": [
+        25,
+        26
+      ],
+      "type": "motion",
+      "visual": "Bank ledger: handwritten balances draining down the column as withdrawals pile up.",
+      "camera": "push_in",
+      "onscreen": "",
+      "mj_prompt": "Open bank ledger on a marble counter in a cold grey neo-classical bank hall, a column of handwritten figures draining downward toward a red total, brass teller cages blurred behind, dim cold light, ominous",
+      "mj_full": "Open bank ledger on a marble counter in a cold grey neo-classical bank hall, a column of handwritten figures draining downward toward a red total, brass teller cages blurred behind, dim cold light, ominous, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw",
+      "kling_prompt": "Slow dolly down the ledger column, ink figures seeming to darken, faint dust drifting in cold window light"
+    },
+    {
+      "id": "S5-04",
+      "part": 5,
+      "beats": [
+        27
+      ],
+      "type": "motion",
+      "visual": "Night newsroom: the rotary press rolls out the front page carrying the publicist's verdict.",
+      "camera": "push_in",
+      "onscreen": "August 2, 1920",
+      "mj_prompt": "1920 newspaper pressroom at night behind glass, a rotary press rolling out broadsheet front pages with bold unreadable headline blocks, tall man in charcoal suit and fedora in silhouette watching, cold blue shadows, gold lamp light",
+      "mj_full": "1920 newspaper pressroom at night behind glass, a rotary press rolling out broadsheet front pages with bold unreadable headline blocks, tall man in charcoal suit and fedora in silhouette watching, cold blue shadows, gold lamp light, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw",
+      "kling_prompt": "Rotary press rolling steadily, pages sliding out and stacking, slow push toward the silhouetted figure, smoke drifting"
+    },
+    {
+      "id": "S5-05",
+      "part": 5,
+      "beats": [
+        28
+      ],
+      "type": "card",
+      "visual": "Stat card: account $331,000 overdrawn on 9 August; bankruptcy petition filed.",
+      "camera": "push_in",
+      "onscreen": "",
+      "card": {
+        "kind": "stat",
+        "text": "-$331,000",
+        "sub": "Overdrawn on 9 August; bankruptcy petition filed",
+        "items": [],
+        "tone": "loss"
+      }
+    },
+    {
+      "id": "S5-06",
+      "part": 5,
+      "beats": [
+        29
+      ],
+      "type": "still",
+      "visual": "An old Montreal prison record and forgery file under a lamp, uncovered by the paper.",
+      "camera": "pan_right",
+      "onscreen": "",
+      "mj_prompt": "Dusty prison record files and an old cream document stamped with official seals under a green-shaded lamp in a dark newsroom, illegible copperplate handwriting, a faded jail-cell photo frame face-down, cold blue shadows, single gold lamp pool",
+      "mj_full": "Dusty prison record files and an old cream document stamped with official seals under a green-shaded lamp in a dark newsroom, illegible copperplate handwriting, a faded jail-cell photo frame face-down, cold blue shadows, single gold lamp pool, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw"
+    },
+    {
+      "id": "S5-07",
+      "part": 5,
+      "beats": [
+        30
+      ],
+      "type": "reuse",
+      "visual": "Return to the Montreal record, slow push onto the name line.",
+      "camera": "push_in",
+      "onscreen": "Montreal record",
+      "reuse_of": "S5-06"
+    },
+    {
+      "id": "S5-08",
+      "part": 5,
+      "beats": [
+        31
+      ],
+      "type": "card",
+      "visual": "Quote card: the promoter's words to the reporter.",
+      "camera": "push_in",
+      "onscreen": "",
+      "card": {
+        "kind": "quote",
+        "text": "\"You did a fine job on me.\"",
+        "sub": "Charles Ponzi, to reporter Herbert Baldwin, 1920",
+        "items": [],
+        "tone": "neutral"
+      }
+    },
+    {
+      "id": "S5-09",
+      "part": 5,
+      "beats": [
+        32
+      ],
+      "type": "motion",
+      "visual": "The empty office: boater and cane left on the desk as the door swings shut.",
+      "camera": "push_in",
+      "onscreen": "",
+      "mj_prompt": "Empty cramped 1920 office at night, a straw boater and slim cane abandoned on a rolltop desk, frosted glass door ajar with two dark silhouettes of officers beyond, cold grey-blue light, gold glint on the cane tip",
+      "mj_full": "Empty cramped 1920 office at night, a straw boater and slim cane abandoned on a rolltop desk, frosted glass door ajar with two dark silhouettes of officers beyond, cold grey-blue light, gold glint on the cane tip, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw",
+      "kling_prompt": "Slow dolly in on the boater and cane, frosted door slowly swinging closed, shadows shifting across the desk"
+    },
+    {
+      "id": "S6-01",
+      "part": 6,
+      "beats": [
+        33
+      ],
+      "type": "still",
+      "visual": "The promoter, small and faceless in a plain worn suit, stands before the raised bench in the dim federal courtroom, seen from the back benches.",
+      "camera": "push_in",
+      "onscreen": "",
+      "mj_prompt": "1920s American courtroom, dark oak paneling, raised judge's bench, small slight man in plain worn suit standing alone before it seen from behind, silhouetted figures on benches, drawn blinds, flat dim light, faint red glow on the bench",
+      "mj_full": "1920s American courtroom, dark oak paneling, raised judge's bench, small slight man in plain worn suit standing alone before it seen from behind, silhouetted figures on benches, drawn blinds, flat dim light, faint red glow on the bench, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw"
+    },
+    {
+      "id": "S6-02",
+      "part": 6,
+      "beats": [
+        34
+      ],
+      "type": "card",
+      "visual": "Date card for the 1925 state larceny conviction.",
+      "camera": "push_in",
+      "onscreen": "",
+      "card": {
+        "kind": "date",
+        "text": "1925",
+        "sub": "State jury convicts him of larceny",
+        "items": [],
+        "tone": "loss"
+      }
+    },
+    {
+      "id": "S6-03",
+      "part": 6,
+      "beats": [
+        35
+      ],
+      "type": "still",
+      "visual": "The line reversed: silhouetted investors walk back toward the office doorway, carrying envelopes of cash they must return.",
+      "camera": "pan_left",
+      "onscreen": "",
+      "mj_prompt": "Narrow 1920 Boston street, red-brick buildings and trolley wires, a line of faceless silhouettes in boaters and cloche hats walking back into a dark doorway, handing over paper envelopes, cold grey overcast light, faint gold on the paper",
+      "mj_full": "Narrow 1920 Boston street, red-brick buildings and trolley wires, a line of faceless silhouettes in boaters and cloche hats walking back into a dark doorway, handing over paper envelopes, cold grey overcast light, faint gold on the paper, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw"
+    },
+    {
+      "id": "S6-04",
+      "part": 6,
+      "beats": [
+        36
+      ],
+      "type": "card",
+      "visual": "Stat card showing the range of cents recovered per dollar by noteholders.",
+      "camera": "push_in",
+      "onscreen": "",
+      "card": {
+        "kind": "stat",
+        "text": "12¢ – 37.5¢",
+        "sub": "Recovered per dollar, by different estimates",
+        "items": [],
+        "tone": "loss"
+      }
+    },
+    {
+      "id": "S6-05",
+      "part": 6,
+      "beats": [
+        37
+      ],
+      "type": "motion",
+      "visual": "A bare Rio charity ward, a row of iron beds, one small figure lying still under a thin bar of gold sunlight; no boater, no cane.",
+      "camera": "push_in",
+      "onscreen": "Rio de Janeiro - January 1949",
+      "mj_prompt": "Bare public hospital ward in Rio de Janeiro 1949, whitewashed walls, row of iron-framed beds, small faceless figure in hospital gown lying in the far bed, tall shuttered windows casting thin bars of gold light across an empty floor, muted almost colourless, still and lonely",
+      "mj_full": "Bare public hospital ward in Rio de Janeiro 1949, whitewashed walls, row of iron-framed beds, small faceless figure in hospital gown lying in the far bed, tall shuttered windows casting thin bars of gold light across an empty floor, muted almost colourless, still and lonely, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw",
+      "kling_prompt": "Very slow dolly in down the row of beds, ceiling fan turning gently, dust drifting in the bars of light"
+    },
+    {
+      "id": "S7-01",
+      "part": 7,
+      "beats": [
+        38,
+        39
+      ],
+      "type": "still",
+      "visual": "A single tiny glowing postal coupon dwarfed by a wall of stacked banknotes in the dark office.",
+      "camera": "pull_out",
+      "onscreen": "",
+      "mj_prompt": "A tiny ornately engraved postal coupon glowing faint gold on a dark wooden desk, dwarfed by towering stacks of bundled 1920s banknotes in an open closet behind, single brass lamp pool, near-black corners, ominous impossible scale",
+      "mj_full": "A tiny ornately engraved postal coupon glowing faint gold on a dark wooden desk, dwarfed by towering stacks of bundled 1920s banknotes in an open closet behind, single brass lamp pool, near-black corners, ominous impossible scale, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw"
+    },
+    {
+      "id": "S7-02",
+      "part": 7,
+      "beats": [
+        40
+      ],
+      "type": "still",
+      "visual": "The newsroom at night, a legal summons laid on a typewriter beneath a green lamp, the press rolling behind glass.",
+      "camera": "push_in",
+      "onscreen": "",
+      "mj_prompt": "A 1920s newspaper office at night, a folded legal summons with an illegible seal lying across a typewriter under a green-shaded lamp, rotary press blurred behind glass, cigarette smoke, cold blue shadows, gold lamp light, tense stillness",
+      "mj_full": "A 1920s newspaper office at night, a folded legal summons with an illegible seal lying across a typewriter under a green-shaded lamp, rotary press blurred behind glass, cigarette smoke, cold blue shadows, gold lamp light, tense stillness, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw"
+    },
+    {
+      "id": "S7-03",
+      "part": 7,
+      "beats": [
+        41
+      ],
+      "type": "motion",
+      "visual": "Banknotes pass from the hands of a new line of silhouettes at the back to earlier investors at the front of the queue.",
+      "camera": "push_in",
+      "onscreen": "",
+      "mj_prompt": "A long queue of faceless 1920s Boston silhouettes in caps and cloche hats inside a dim office, banknotes passing hand to hand from the back of the line to the front, warm gold light catching only the paper, deep shadow",
+      "mj_full": "A long queue of faceless 1920s Boston silhouettes in caps and cloche hats inside a dim office, banknotes passing hand to hand from the back of the line to the front, warm gold light catching only the paper, deep shadow, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw",
+      "kling_prompt": "Slow lateral dolly along the queue, banknotes drifting forward hand to hand, faint dust in lamp light"
+    },
+    {
+      "id": "S7-04",
+      "part": 7,
+      "beats": [
+        42,
+        43
+      ],
+      "type": "card",
+      "visual": "Text card posing the part's central question.",
+      "camera": "push_in",
+      "onscreen": "",
+      "card": {
+        "kind": "text",
+        "text": "Who was paying?",
+        "sub": "Not whether it paid",
+        "items": [],
+        "tone": "alert"
+      }
+    }
+  ]
+}

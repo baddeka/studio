@@ -1,0 +1,10 @@
+# Python packages for the video pipeline. setup.cmd installs them into .venv.
+numpy>=2.1
+pillow>=11.0
+requests>=2.31
+pyyaml>=6.0.2
+python-dotenv>=1.0
+rapidfuzz>=3.10
+# Only needed when ANTHROPIC_API_KEY is set in .env (otherwise the Claude app on this computer is used).
+# setup.cmd installs it separately, so a failure there does not stop the setup.
+# anthropic>=2.12

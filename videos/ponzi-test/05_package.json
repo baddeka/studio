@@ -1,0 +1,76 @@
+{
+  "titles": [
+    "The Man Who Gave the Ponzi Scheme Its Name",
+    "Charles Ponzi: 50% in 90 Days, and Who Paid It",
+    "How Charles Ponzi Took $2.5 Million in One Month"
+  ],
+  "thumbnail_texts": [
+    "$1,700,000",
+    "WHO WAS PAYING?",
+    "HOPELESSLY INSOLVENT"
+  ],
+  "thumbnail_prompt": "Stylized cinematic illustration of a faceless 1920s man in a straw boater hat and three-piece suit, silhouetted beside a closet overflowing with banknotes stacked to the ceiling, single warm gold light, near-black background, empty dark left third, moody film grain",
+  "description": "The original Ponzi scheme: in 1920, Charles Ponzi promised Boston fifty percent in ninety days, and thousands lined up to hand him their savings.\n\nIt started with an international reply coupon in a letter from Spain and $150. By June 1920, 7,824 people had paid in about $2.5 million in a single month, and his clerks were stacking cash in closets to the ceiling. Then a newspaper started asking questions, and in three days $1.7 million left his bank account.\n\nThis is the story of the man whose name became the word for this kind of fraud: the run on his notes, the guilty plea, the investors who got back cents on the dollar, and the warning signs that were there from the start.",
+  "tags": [
+    "charles ponzi",
+    "ponzi scheme",
+    "original ponzi scheme",
+    "charles ponzi documentary",
+    "ponzi scheme explained",
+    "international reply coupon",
+    "boston post ponzi",
+    "1920 boston fraud",
+    "clarence barron",
+    "mitchell zuckoff ponzi",
+    "hanover trust",
+    "mail fraud history",
+    "financial fraud documentary",
+    "scam documentary",
+    "history of fraud",
+    "white collar crime",
+    "investment fraud",
+    "how ponzi schemes work",
+    "ponzi scheme red flags",
+    "famous scams in history",
+    "business documentary",
+    "fraud investigation"
+  ],
+  "hashtags": [
+    "#PonziScheme",
+    "#CharlesPonzi",
+    "#FraudHistory"
+  ],
+  "shorts": [
+    {
+      "title": "Half a Mile of People Lined Up for Ponzi",
+      "hook": "$1.7 million gone in three days",
+      "beat_from": 1,
+      "beat_to": 10,
+      "why": "Opens on a vivid scene and a huge number, then explains the coupon trick and the 50% promise in under 80 words."
+    },
+    {
+      "title": "From $150 to Cash Stacked to the Ceiling",
+      "hook": "He started with $150",
+      "beat_from": 11,
+      "beat_to": 22,
+      "why": "Fast escalation from $150 to millions ends on the publicist's quote, 'as crooked as a winding staircase.'"
+    },
+    {
+      "title": "The Run That Broke Charles Ponzi",
+      "hook": "$572,000 left in one day",
+      "beat_from": 23,
+      "beat_to": 32,
+      "why": "Withdrawals pile up, the forgery past comes out, and it ends with Ponzi's line to the reporter and his arrest."
+    },
+    {
+      "title": "The Real Sign of a Ponzi Scheme",
+      "hook": "It paid. That was the problem.",
+      "beat_from": 33,
+      "beat_to": 43,
+      "why": "Moves from the sentence and the losses to the channel's own warning signs, ending on a closing line people will want to share."
+    }
+  ],
+  "pinned_comment": "Ponzi's early investors really did get paid, often in 45 days. If your neighbour showed you their returns, would you have joined the line in July 1920, or held back? What would have tipped you off?",
+  "thumbnail_full": "Stylized cinematic illustration of a faceless 1920s man in a straw boater hat and three-piece suit, silhouetted beside a closet overflowing with banknotes stacked to the ceiling, single warm gold light, near-black background, empty dark left third, moody film grain, cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain --ar 16:9 --style raw",
+  "script_hash": "ff1938ee33b6"
+}

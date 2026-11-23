@@ -1,0 +1,56 @@
+# Settings for every video. Per-video topic and notes live in videos/<slug>/video.yaml.
+# Anything left out here falls back to the defaults in vidpipe/config.py.
+
+channel:
+  name: Paper Empire
+
+llm:
+  # auto = use ANTHROPIC_API_KEY from .env if it is set, otherwise the Claude app logged in on this computer
+  engine: auto
+  model: claude-opus-5-5          # claude-sonnet-5-5 costs half
+  effort:
+    research: high
+    script: high
+    factcheck: high
+    shotlist: medium
+    package: medium
+  web_search_max_uses: 25
+  max_usd_per_call: 8.0           # safety cap per Claude call on the CLI engine
+
+script:
+  words: 3500                     # ~23 minutes at 150 words per minute
+  wpm: 150
+
+shotlist:
+  max_images: 130                 # new Midjourney images per video (the rest are cards and reused shots)
+  max_motion: 20                  # Kling clips per video
+
+midjourney:
+  # added to the end of every image prompt so the whole channel looks like one film
+  suffix: "cinematic film still, stylized digital painting, dark moody low-key lighting, deep blacks, warm gold highlights, muted teal shadows, high contrast, subtle film grain"
+  params: "--ar 16:9 --style raw"
+  sref: ""                        # your Midjourney style reference code, once you have one you like
+
+voice:
+  engine: elevenlabs              # elevenlabs, or sapi for the free Windows draft voice
+  voice_id: ""                    # empty = George (warm British narrator). Run "vp voices" to list yours.
+  model: eleven_multilingual_v2   # or eleven_v4
+  stability: 0.45
+  similarity: 0.8
+  style: 0.1
+  speed: 1.0
+  pause_paragraph: 0.35
+  pause_part: 0.9
+
+video:
+  fps: 30
+  crf: 19
+  preset: veryfast
+  workers: 3                      # parallel renders; lower to 2 if the laptop gets too hot
+  music_db: -21                   # music level under the voice
+  sfx: true                       # whoosh on chapter changes, hits on number cards
+  grain: true
+  burn_captions: false            # long videos get captions.srt for YouTube instead
+
+shorts:
+  max_seconds: 59

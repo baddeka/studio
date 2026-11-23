@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scene board</title>
+<style>
+:root{--bg:#0B0B0C;--panel:#141416;--line:#2a2a2f;--text:#F2EFE8;--soft:#cfc9bd;--muted:#8f8b84;--gold:#E8B54A;--red:#E5484D;--green:#4FBF8A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 "Segoe UI",Inter,system-ui,sans-serif}
+header{position:sticky;top:0;z-index:5;background:rgba(11,11,12,.96);border-bottom:1px solid var(--line);padding:12px 20px;display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+h1{font-size:18px;margin:0 8px 0 0;font-weight:700}
+h1 span{color:var(--gold)}
+.meter{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--soft)}
+.bar{width:140px;height:8px;background:#222;border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--gold)}
+button,.chip{background:#1d1d21;color:var(--text);border:1px solid #34343a;border-radius:6px;padding:6px 11px;font:inherit;font-size:13px;cursor:pointer}
+button:hover{border-color:var(--gold)}
+.chip.on{background:var(--gold);color:#111;border-color:var(--gold)}
+.tip{color:var(--muted);font-size:12px;flex-basis:100%}
+main{padding:10px 20px 80px;max-width:1500px;margin:0 auto}
+h2{font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin:28px 0 10px}
+.scene{display:grid;grid-template-columns:120px 1fr 330px;gap:16px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:10px}
+.scene.active{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+.scene.done{opacity:.72}
+.id{font-weight:800;font-size:17px}
+.type{display:inline-block;margin-top:6px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:4px;background:#26262b;color:var(--soft)}
+.type.motion{background:#3a2c10;color:var(--gold)}.type.card{background:#13251c;color:var(--green)}.type.reuse{background:#222;color:var(--muted)}
+.time{color:var(--muted);font-size:12px;margin-top:6px}
+.said{color:var(--soft);font-style:italic;margin:0 0 6px}
+.visual{color:var(--muted);font-size:13px;margin:0 0 8px}
+.prompt{display:flex;gap:8px;align-items:flex-start;margin-top:6px}
+.prompt code{flex:1;background:#0f0f11;border:1px solid #26262b;border-radius:6px;padding:7px 9px;font:12.5px/1.45 Consolas,monospace;color:var(--text);white-space:pre-wrap;word-break:break-word}
+.prompt .lbl{width:88px;flex:none;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding-top:8px}
+#filters{display:flex;gap:6px}
+.prompt button.ok{border-color:var(--green);color:var(--green)}
+.media{display:flex;flex-direction:column;gap:8px}
+.drop{position:relative;border:1.5px dashed #3a3a40;border-radius:8px;min-height:120px;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);font-size:12px;padding:8px;cursor:pointer;overflow:hidden;background:#101012}
+.drop.over{border-color:var(--gold);color:var(--gold)}
+.drop img,.drop video{width:100%;border-radius:5px;display:block}
+.drop .x{position:absolute;top:6px;right:6px;padding:2px 7px;font-size:12px;background:rgba(0,0,0,.7)}
+.drop.has{border-style:solid;border-color:#2f4f3c;padding:0;min-height:0}
+.cardinfo{font-size:13px;color:var(--soft);background:#0f1712;border:1px solid #1f3328;border-radius:6px;padding:8px 10px}
+.empty{padding:40px;text-align:center;color:var(--muted)}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#1d1d21;border:1px solid var(--gold);color:var(--text);padding:8px 14px;border-radius:8px;opacity:0;transition:opacity .2s;pointer-events:none}
+#toast.show{opacity:1}
+@media (max-width:900px){.scene{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Scene board <span id="slug"></span></h1>
+  <div class="meter">Images <div class="bar"><i id="bi"></i></div><b id="ni"></b></div>
+  <div class="meter">Kling clips <div class="bar"><i id="bc"></i></div><b id="nc"></b></div>
+  <div id="filters"></div>
+  <button id="next">Next missing (N)</button>
+  <button id="sort">Sort inbox</button>
+  <label class="meter"><input type="checkbox" id="auto" checked> after each upload, jump to the next missing scene</label>
+  <div class="tip">Click Copy, generate in Midjourney or Kling, then drop the file on the scene, or click the scene and press Ctrl+V to paste a copied image. C copies the active prompt, M the Kling prompt, N jumps to the next missing scene.</div>
+</header>
+<main id="list"><div class="empty">Loading...</div></main>
+<div id="toast"></div>
+<script>
+let S = null, active = null, filter = localStorage.getItem('vp-filter') || 'todo';
+const $ = (s, el = document) => el.querySelector(s);
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+const toast = (msg) => { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 1800); };
+const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+const needs = (sc) => (['still', 'motion'].includes(sc.type) && !sc.image) || (sc.type === 'motion' && !sc.clip);
+
+async function load(keepScroll = true) {
+  const y = window.scrollY;
+  S = await (await fetch('/api/state')).json();
+  render();
+  if (keepScroll) window.scrollTo(0, y);
+}
+
+function render() {
+  $('#slug').textContent = S.slug;
+  const [hi, ni] = S.counts.images, [hc, nc] = S.counts.clips;
+  $('#bi').style.width = (ni ? 100 * hi / ni : 100) + '%'; $('#ni').textContent = `${hi}/${ni}`;
+  $('#bc').style.width = (nc ? 100 * hc / nc : 100) + '%'; $('#nc').textContent = `${hc}/${nc}`;
+  $('#sort').textContent = `Sort inbox (${S.inbox})`;
+  const f = $('#filters'); f.innerHTML = '';
+  for (const [k, label] of [['todo', 'Needs work'], ['all', 'All scenes'], ['motion', 'Kling'], ['card', 'Cards']]) {
+    const b = el('button', 'chip' + (filter === k ? ' on' : ''), label);
+    b.onclick = () => { filter = k; localStorage.setItem('vp-filter', k); render(); };
+    f.appendChild(b);
+  }
+  const list = $('#list'); list.innerHTML = '';
+  const titles = Object.fromEntries(S.parts.map(p => [p.n, p.title]));
+  let part = null, shown = 0;
+  for (const sc of S.scenes) {
+    if (filter === 'todo' && !needs(sc)) continue;
+    if (filter === 'motion' && sc.type !== 'motion') continue;
+    if (filter === 'card' && sc.type !== 'card') continue;
+    if (sc.part !== part) { part = sc.part; list.appendChild(el('h2', '', `Part ${part}: ${titles[part] || ''}`)); }
+    list.appendChild(sceneEl(sc)); shown++;
+  }
+  if (!shown) list.appendChild(el('div', 'empty', filter === 'todo' ? 'Every scene has its image and clip. Next: vp run ' + S.slug + ' renders the video, the Shorts and the thumbnails.' : 'Nothing here.'));
+}
+
+function sceneEl(sc) {
+  const box = el('div', 'scene' + (active === sc.id ? ' active' : '') + (needs(sc) ? '' : ' done'));
+  box.id = 'sc-' + sc.id;
+  box.onclick = () => setActive(sc.id, false);
+  const meta = el('div');
+  meta.appendChild(el('div', 'id', sc.id));
+  meta.appendChild(el('span', 'type ' + sc.type, sc.type));
+  if (sc.time) meta.appendChild(el('div', 'time', `${fmt(sc.time[0])} - ${fmt(sc.time[1])}`));
+  if (sc.camera && sc.type !== 'card' && sc.type !== 'motion') meta.appendChild(el('div', 'time', sc.camera.replace('_', ' ')));
+  box.appendChild(meta);
+  const mid = el('div');
+  mid.appendChild(el('p', 'said', '“' + sc.said + '”'));
+  if (sc.visual) mid.appendChild(el('p', 'visual', sc.visual));
+  if (sc.mj_full) mid.appendChild(promptRow('Midjourney', sc.mj_full, sc.id));
+  if (sc.kling_prompt) {
+    mid.appendChild(promptRow('Kling', sc.kling_prompt, sc.id));
+    if (S.kling_negative) mid.appendChild(promptRow('Negative', S.kling_negative, sc.id));
+  }
+  if (sc.type === 'reuse') mid.appendChild(el('div', 'cardinfo', `Reuses the image of ${sc.reuse_of}, ${sc.camera.replace('_', ' ')}. Nothing to make.`));
+  if (sc.type === 'card') {
+    const c = sc.card;
+    mid.appendChild(el('div', 'cardinfo', `Rendered automatically: ${c.kind} card. ${[c.text, c.sub, (c.items || []).join(' | ')].filter(Boolean).join('  /  ')}`));
+  }
+  if (sc.onscreen) mid.appendChild(el('div', 'visual', 'On screen: ' + sc.onscreen));
+  box.appendChild(mid);
+  const media = el('div', 'media');
+  if (['still', 'motion'].includes(sc.type)) media.appendChild(dropEl(sc, 'image'));
+  if (sc.type === 'motion') media.appendChild(dropEl(sc, 'clip'));
+  box.appendChild(media);
+  return box;
+}
+
+function promptRow(label, text, id) {
+  const row = el('div', 'prompt');
+  row.appendChild(el('div', 'lbl', label));
+  row.appendChild(el('code', '', text));
+  const b = el('button', '', 'Copy');
+  b.onclick = (e) => { e.stopPropagation(); copy(text, id, b); };
+  row.appendChild(b);
+  return row;
+}
+
+async function copy(text, id, btn) {
+  try { await navigator.clipboard.writeText(text); toast('Copied ' + id); if (btn) { btn.classList.add('ok'); btn.textContent = 'Copied'; } }
+  catch { toast('Copy failed - select the text and press Ctrl+C'); }
+  setActive(id, false);
+}
+
+function dropEl(sc, kind) {
+  const url = sc[kind];
+  const d = el('div', 'drop' + (url ? ' has' : ''));
+  if (url) {
+    if (kind === 'image') { const i = el('img'); i.src = url; d.appendChild(i); }
+    else { const v = el('video'); v.src = url; v.muted = true; v.loop = true; v.playsInline = true; v.onmouseenter = () => v.play(); v.onmouseleave = () => v.pause(); d.appendChild(v); }
+    const x = el('button', 'x', 'Replace');
+    x.onclick = (e) => { e.stopPropagation(); pick(sc.id, kind); };
+    d.appendChild(x);
+  } else {
+    d.textContent = kind === 'image' ? 'Drop the Midjourney image here, or click to choose, or Ctrl+V' : 'Drop the Kling clip here (mp4), or click to choose';
+    d.onclick = (e) => { e.stopPropagation(); setActive(sc.id, false); pick(sc.id, kind); };
+  }
+  d.ondragover = (e) => { e.preventDefault(); d.classList.add('over'); };
+  d.ondragleave = () => d.classList.remove('over');
+  d.ondrop = (e) => { e.preventDefault(); d.classList.remove('over'); setActive(sc.id, false); handleDrop(sc.id, kind, e.dataTransfer); };
+  return d;
+}
+
+function pick(id, kind) {
+  const inp = el('input'); inp.type = 'file'; inp.accept = kind === 'image' ? 'image/*' : 'video/*';
+  inp.onchange = () => inp.files[0] && upload(id, kind, inp.files[0]);
+  inp.click();
+}
+
+async function handleDrop(id, kind, dt) {
+  if (dt.files && dt.files.length) return upload(id, dt.files[0].type.startsWith('video') ? 'clip' : kind, dt.files[0]);
+  const url = (dt.getData('text/uri-list') || dt.getData('text/plain') || '').split('\n')[0].trim();
+  if (!/^https?:\/\//.test(url)) return toast('Nothing to upload in that drop');
+  toast('Downloading ' + id + ' ...');
+  const r = await fetch('/api/fetch', { method: 'POST', headers: { 'X-VP-Board': '1' }, body: JSON.stringify({ scene: id, kind, url }) });
+  const j = await r.json();
+  if (!r.ok) return toast(j.error || 'Download failed');
+  done(id, kind);
+}
+
+async function upload(id, kind, file) {
+  toast('Saving ' + id + ' ...');
+  const r = await fetch(`/api/upload/${id}/${kind}`, { method: 'POST', headers: { 'X-VP-Board': '1', 'X-Filename': encodeURIComponent(file.name || '') }, body: file });
+  const j = await r.json();
+  if (!r.ok) return toast(j.error || 'Upload failed');
+  done(id, kind);
+}
+
+async function done(id, kind) {
+  toast(`${id} ${kind} saved`);
+  await load();
+  if ($('#auto').checked) nextMissing(id, true);
+}
+
+function setActive(id, scroll) {
+  active = id;
+  document.querySelectorAll('.scene.active').forEach(e => e.classList.remove('active'));
+  const box = document.getElementById('sc-' + id);
+  if (box) { box.classList.add('active'); if (scroll) box.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+}
+
+function nextMissing(after, copyPrompt) {
+  const list = S.scenes;
+  let start = after ? list.findIndex(s => s.id === after) : list.findIndex(s => s.id === active);
+  for (let k = 1; k <= list.length; k++) {
+    const sc = list[(start + k + list.length) % list.length];
+    if (needs(sc)) {
+      setActive(sc.id, true);
+      if (copyPrompt) {
+        const text = !sc.image ? sc.mj_full : sc.kling_prompt;
+        if (text) navigator.clipboard.writeText(text).then(() => toast(`Next: ${sc.id} - prompt copied`)).catch(() => toast(`Next: ${sc.id}`));
+      }
+      return;
+    }
+  }
+  toast('No scenes left to fill');
+}
+
+document.addEventListener('paste', (e) => {
+  if (!active) return toast('Click a scene first, then paste');
+  for (const item of e.clipboardData.items) {
+    if (item.kind === 'file') {
+      const f = item.getAsFile();
+      return upload(active, f.type.startsWith('video') ? 'clip' : 'image', f);
+    }
+  }
+});
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey || e.metaKey || e.altKey || ['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
+  const sc = S && S.scenes.find(s => s.id === active);
+  if (e.key === 'n' || e.key === 'N') nextMissing(null, false);
+  if ((e.key === 'c' || e.key === 'C') && sc && sc.mj_full) copy(sc.mj_full, sc.id);
+  if ((e.key === 'm' || e.key === 'M') && sc && sc.kling_prompt) copy(sc.kling_prompt, sc.id);
+});
+$('#next').onclick = () => nextMissing(null, true);
+$('#sort').onclick = async () => {
+  const r = await (await fetch('/api/sort', { method: 'POST', headers: { 'X-VP-Board': '1' } })).json();
+  toast(`Sorted ${r.matched.length} file(s), ${r.unmatched.length} left in the inbox`);
+  load();
+};
+load(false);
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+{
+  "figures": [
+    {
+      "ref": "the promoter",
+      "who": "Charles Ponzi",
+      "look": "Stylized 1920s illustration of a short, slight man in an immaculate pale three-piece summer suit, high starched collar, silk tie with a gold pin, straw boater hat and a slim walking cane, polished two-tone shoes. Always faceless: seen from behind, in silhouette against a window, or with the boater brim casting his face into full shadow. Gold glints on his tie pin and cane tip are his signature accent. In later scenes (prison, Rio ward) the same small frame in a plain worn suit or hospital gown, still faceless, the boater absent."
+    },
+    {
+      "ref": "the publicist",
+      "who": "William McMasters",
+      "look": "Stylized 1920s illustration of a tall, broad-shouldered man in a dark charcoal suit and fedora, overcoat over one arm, carrying a folded newspaper or a sheaf of notes. Faceless: shown from behind or in profile silhouette, face lost under the fedora brim. Moves between the promoter's office and the newspaper office; he is the figure who leaves the light and walks into the newsroom."
+    },
+    {
+      "ref": "the crowd",
+      "who": "Anonymous 1920 investors (not individual real people)",
+      "look": "A long anonymous line of ordinary Bostonians in 1920 summer clothes: shirtsleeves, waistcoats, flat caps and boaters, women in cloche hats and long skirts, clutching banknotes and paper envelopes. Rendered as a mass of dark silhouettes with no individual faces, warm gold light catching only the paper in their hands."
+    }
+  ],
+  "places": [
+    {
+      "ref": "the Boston street",
+      "look": "A narrow downtown Boston street in high summer 1920: red-brick and granite commercial buildings, iron fire escapes, painted shop signs with no legible names, trolley wires overhead, cobbles and a trolley track. Hazy, hot afternoon light filtered through dust; the line of people snakes out of a doorway and around the corner into the distance."
+    },
+    {
+      "ref": "the office",
+      "look": "A cramped upstairs 1920 office: dark wood partitions, frosted glass doors, brass desk lamps, rolltop desks, clerks in sleeve garters bent over ledgers. Tall wooden closets whose open doors show banknotes stacked to the ceiling. Light comes from a single tall window and warm lamp pools; corners fall into near-black."
+    },
+    {
+      "ref": "the newsroom",
+      "look": "A 1920 big-city newspaper office at night: rows of typewriters, green-shaded hanging lamps, cigarette smoke, spiked copy paper, and behind glass a rotary press rolling out front pages. Cold dark blue shadows with gold lamp light on the desks."
+    },
+    {
+      "ref": "the bank",
+      "look": "A 1920 neo-classical bank hall: marble floor, brass teller cages, a heavy steel vault door, tall arched windows. A ledger lies open on the counter. Light is cold and grey, with the overdrawn ledger figures picked out in red."
+    },
+    {
+      "ref": "the courtroom",
+      "look": "A 1920s American courtroom: dark oak paneling, a raised judge's bench, wooden rails and benches, tall windows with drawn blinds. Flat dim light, figures shown in silhouette from the back of the room."
+    },
+    {
+      "ref": "the charity ward",
+      "look": "A bare public hospital ward in Rio de Janeiro, 1949: whitewashed walls, iron-framed beds in a row, tall shuttered windows letting in thin bars of tropical light, a ceiling fan. Muted, almost colourless, the only warmth a faint gold line of sunlight across an empty floor."
+    }
+  ],
+  "motifs": [
+    "The international reply coupon: a small, ornately engraved postal coupon with foreign-language text and no real names, glowing faintly gold, often shown tiny against huge piles of cash to show the impossible scale",
+    "The promissory note: a cream paper certificate with copperplate script promising '50% in 90 days', stacked, stamped and signed with an illegible flourish",
+    "Cash to the ceiling: closets and desk drawers overflowing with bundled 1920 banknotes, rendered in muted green-gold",
+    "The newspaper front page: a broadsheet with an unreadable masthead and bold headline blocks, rolling off a press or hitting a doorstep, the hinge between boom and collapse",
+    "The bank ledger: a column of handwritten figures with balances draining, ending in a red overdrawn total",
+    "The winding staircase: a dark spiral stair seen from above, used as the visual metaphor for the publicist's verdict and the fall",
+    "The straw boater and cane: the promoter's signature, used alone (on a desk, on a cell bench, absent in Rio) to show his rise and fall",
+    "The line: an endless queue of silhouettes, shown full at the start and reversed later as people rush to withdraw"
+  ],
+  "lighting": "Sepia-tinged near-black 1920s scenes lit by warm gold lamp and summer haze while the money flows, turning colder, bluer and greyer as the run begins, with red used only for overdrawn balances, losses and the court's verdict."
+}
