@@ -1,6 +1,7 @@
 """Files written by hand (by a person or another Claude) are checked and taken over, never sent to Claude again."""
 import io
 import json
+import re
 import sys
 import tempfile
 import unittest
@@ -146,6 +147,26 @@ class HandmadeTests(unittest.TestCase):
         self.assertIn("check the Shorts beat ranges", log)
         self.assertEqual(read_json(self.v.package)["titles"], ["The fund that never was"])
         self.assertEqual(read_json(self.v.shotlist)["script_hash"], content.script_hash(self.v))
+
+    def test_long_source_list_continues_in_the_pinned_comment(self):
+        sources = [{"n": i, "title": f"Court filing {i} on the collapse of the exchange and its trading firm",
+                    "url": f"https://example.com/case/2022/{i:03d}/" + "x" * 90, "status": "ok"} for i in range(1, 41)]
+        write_json(self.v.sources, sources)
+        write_json(self.v.package, {"titles": ["T"], "thumbnail_texts": ["X"], "thumbnail_full": "p",
+                                    "description": "How <FTX> fell.", "tags": ["a"], "hashtags": ["#a"], "shorts": [],
+                                    "pinned_comment": "Would you have seen it coming?"})
+        content.render_package_md(self.v)
+        md = self.v.package_md.read_text(encoding="utf-8")
+        desc = md.split("## Description")[1].split("```")[1].strip("\n")
+        comment = md.split("## Pinned comment")[1].split("```")[1].strip("\n")
+        self.assertLessEqual(len(desc), 5000)
+        self.assertIn("(more sources in the pinned comment)", desc)
+        self.assertNotIn("<", desc)
+        self.assertTrue(comment.startswith("Would you have seen it coming?\n\nMore sources\n["))
+        self.assertLessEqual(len(comment), 10000)
+        listed = [int(n) for n in re.findall(r"^\[(\d+)\]", desc + "\n" + comment, re.M)]
+        self.assertEqual(sorted(listed), list(range(1, 41)))
+        self.assertIn("did not fit in the description", md)
 
     def test_status_shows_hand_made_files(self):
         write_json(self.v.shotlist, {"beats": self.beats, "scenes": self.scenes()})

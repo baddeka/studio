@@ -103,4 +103,5 @@ Titles, thumbnail, description and Shorts. `.\vp package` makes it, or you write
 
 - `shorts`: 3-5 ranges of consecutive beats (the same numbers as the shot list), each holding 70-140 words of narration. A range is stretched or trimmed to 60-150 words if needed, and `vp run` says when it does that.
 - `thumbnail_prompt` gets the channel style added like `mj_prompt`. The rules for each field are in `vidpipe\prompts\package.md`.
+- The description in 05_package.md gets the chapters, the sources and a disclaimer. YouTube allows 5,000 characters there. Sources that don't fit are listed in the pinned comment, after your `pinned_comment` question.
 - A hand-written package is kept when the script changes later. `vp run` then asks you to check the Shorts ranges and never replaces your titles. `.\vp package <slug> --force` has Claude write a new package.

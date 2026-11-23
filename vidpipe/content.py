@@ -628,13 +628,20 @@ def render_package_md(video):
         return
     timing = read_json(video.timing)
     sources = read_json(video.sources, [])
+    description, more = describe(data, timing, sources)
+    comment, lost = pinned_comment(data, more)
+    if lost:
+        warn(f"{lost} sources fit in neither the description nor the pinned comment")
     lines = [f"# Package: {video.slug}", "", "## Titles", ""]
     lines += [f"{i}. {t}" for i, t in enumerate(data["titles"], 1)]
     lines += ["", "## Thumbnail", ""]
     lines += [f"- Text option {i}: **{t}**" for i, t in enumerate(data["thumbnail_texts"], 1)]
     lines += ["", "Midjourney background:", "```", data["thumbnail_full"], "```", "", "## Description", "", "```",
-              full_description(data, timing, sources), "```", "", "## Tags", "", ", ".join(data["tags"]), "",
-              "## Pinned comment", "", data["pinned_comment"], "", "## Shorts", ""]
+              description, "```", "", "## Tags", "", ", ".join(data["tags"]), "", "## Pinned comment", ""]
+    if more:
+        lines += [f"Post this under the video and pin it: it holds the {len(more) - lost} sources that did not fit "
+                  "in the description.", ""]
+    lines += ["```", comment, "```", "", "## Shorts", ""]
     beat_times = {b["id"]: b for b in (timing or {}).get("beats", [])}
     for i, sh in enumerate(data["shorts"], 1):
         span = ""
@@ -651,7 +658,16 @@ def _mmss(t):
     return f"{int(t // 60)}:{int(t % 60):02d}"
 
 
+DESCRIPTION_LIMIT = 4900  # YouTube allows 5,000 characters in a description
+COMMENT_LIMIT = 9900  # and 10,000 in a comment
+
+
 def full_description(data, timing, sources):
+    return describe(data, timing, sources)[0]
+
+
+def describe(data, timing, sources):
+    """The YouTube description, and the source lines that did not fit in it (they go in the pinned comment)."""
     parts = [data["description"].strip()]
     if timing and timing.get("chapters"):
         ch = ["Chapters"] + [f"{_mmss(c['start'])} {c['title']}" for c in timing["chapters"]]
@@ -664,13 +680,31 @@ def full_description(data, timing, sources):
                   "People who have not been convicted are presumed innocent; allegations are described as such.")
     tags = " ".join(h if h.startswith("#") else f"#{h}" for h in data.get("hashtags", []))
     tail = [disclaimer, tags]
-    src_lines = ["Sources"] + [f"[{s['n']}] {s['title']} - {s['url']}" for s in sources
-                               if s.get("url") and s.get("status") != "broken"]
-    body = "\n\n".join(parts + ["\n".join(src_lines)] + tail)
-    while len(body) > 4900 and len(src_lines) > 2:
-        src_lines.pop()
-        body = "\n\n".join(parts + ["\n".join(src_lines + ["(full source list in the pinned comment)"])] + tail)
-    return body
+    src = [f"[{s['n']}] {s['title']} - {s['url']}" for s in sources if s.get("url") and s.get("status") != "broken"]
+
+    def body(n):
+        block = ["Sources"] + src[:n] + (["(more sources in the pinned comment)"] if n < len(src) else [])
+        text = "\n\n".join(parts + (["\n".join(block)] if src else []) + tail)
+        return text.replace("<", "\u2039").replace(">", "\u203a")  # YouTube refuses < and > in a description
+
+    keep = len(src)
+    text = body(keep)
+    while len(text) > DESCRIPTION_LIMIT and keep > 1:
+        keep -= 1
+        text = body(keep)
+    return text, src[keep:]
+
+
+def pinned_comment(data, more):
+    """The viewer question, then the sources the description had no room for. Returns (text, sources left out)."""
+    question = str(data.get("pinned_comment") or "").strip()
+    lines = list(more)
+    while lines:
+        text = "\n\n".join(x for x in (question, "More sources\n" + "\n".join(lines)) if x)
+        if len(text) <= COMMENT_LIMIT:
+            return text, len(more) - len(lines)
+        lines.pop()
+    return question, len(more)
 
 
 # Hand-made files: a dossier, shot list or package written outside the pipeline, by a person or another Claude.

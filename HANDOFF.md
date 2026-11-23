@@ -27,6 +27,7 @@ Double-click `setup.cmd` (INSTALL.md). It makes `.venv`, installs `requirements.
 - New commands: `vp selftest`, `vp clean <slug> [--all]`, `vp beats <slug> [--json]`; `vp doctor` checks ffmpeg's encoders and filters (libx264, aac, ass, loudnorm, alimiter, ...).
 - Hand-made files (FORMAT.md): a shot list or package without `script_hash` is checked against the script and taken over (`content.adopt_shotlist`, `adopt_package`). Missing `mj_full`, `parts`, ids and cameras are filled in. Problems stop the run with a list, and the file is never redone by Claude. A hand-written dossier gets its `sources.json` and link check. A hand-made package is kept when the script changes, and the Shorts ranges are re-fitted with a warning. `python -m vidpipe.beats` numbers a script's beats with nothing but Python, for writing these files outside the laptop.
 - Windows: `setup.cmd` + `setup.ps1`, `requirements.txt`, `vp.cmd` uses `.venv` first, then `py -3`, then `python`.
+- Description: sources that don't fit in YouTube's 5,000 characters move to the pinned comment in 05_package.md (`content.describe`, `pinned_comment`). Before this, they were dropped, and the description pointed to a comment that didn't exist. `<` and `>` are replaced, because YouTube refuses them.
 
 ## Not tested anywhere yet
 
