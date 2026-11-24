@@ -10,7 +10,7 @@ Double-click `setup.cmd`. It sets up Python, ffmpeg and the fonts, then renders 
 
 1. Open `.env` in Notepad and paste your ElevenLabs API key (ElevenLabs: Profile, then API keys). Without it the pipeline uses a free robotic Windows voice, which is only good for checking timing.
 2. Optional: an Anthropic API key in `.env`. Without it the Claude steps run through the Claude app that is logged in on this computer.
-3. Pick a narrator: `.\vp voices` lists your ElevenLabs voices. Put the id in `config.yaml` under `voice: voice_id:`. Empty means George, a warm British narrator.
+3. Pick a narrator: `.\vp voices` lists your ElevenLabs voices. Put the id in `config.yaml` under `voice: voice_id:`. Empty means George, a warm British narrator. How to direct the delivery (moods, pauses, stress) and try it cheaply is in VOICE.md.
 4. Put a few dark cinematic music tracks (YouTube Audio Library is free) in `library\music`. They are chained and ducked under the voice automatically.
 5. When you find a Midjourney look you like, put its style reference code in `config.yaml` under `midjourney: sref:` so every image matches.
 
@@ -78,6 +78,9 @@ File, Import, Timeline, then pick `edit\timeline.fcpxml`. Every scene is its own
 | `.\vp shotlist <slug> --part 4` | redo the scenes of one part only; other parts keep their images |
 | `.\vp beats <slug> [--json]` | the script's numbered beats, for writing a shot list or Shorts by hand (FORMAT.md) |
 | `.\vp voice <slug> [--engine sapi] [--file my.mp3]` | voice-over; `--file` times your own recording (exactly with an ElevenLabs key, closely from its pauses without one) |
+| `.\vp paras <slug>` | the narration paragraphs, numbered, with their moods and the credits a full voice-over needs (free) |
+| `.\vp sample <slug> [1 12 40] [--model a,b] [--voice id,id] [--mood tense,grave] [--text "..."]` | voice just those paragraphs (or one line) to judge a voice, model or mood for a few hundred credits; files go to `audio\samples` |
+| `.\vp credits` | ElevenLabs credits left this month |
 | `.\vp board <slug>` / `.\vp sort <slug>` | add images and clips |
 | `.\vp cut <slug> [--draft]` | render the cut |
 | `.\vp shorts <slug> [--only 1,3]` / `.\vp thumb <slug>` | Shorts and thumbnails |

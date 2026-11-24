@@ -67,6 +67,24 @@ DEFAULTS = {
         "pause_part": 0.9,
         "sapi_voice": "",
         "sapi_rate": 0,
+        # delivery (VOICE.md)
+        "tags": "auto",            # auto = send [audio tags] only to models that act on them (eleven_v3, eleven_v4)
+        "direction": "",           # direction tag for paragraphs without a mood, e.g. "[calm, low documentary voice]"
+        "confirm_chars": 2500,     # ask before a voice-over that spends more credits than this
+        "parallel": 3,
+        "moods": {
+            # tag: the acting direction expressive models (v3, v4) hear before each paragraph of that mood.
+            # stability/style/speed: what older models (multilingual v2) use instead; v4 only uses stability.
+            "calm":     {"tag": "[calm]", "stability": 0.55, "style": 0.05, "speed": 1.0},
+            "warm":     {"tag": "[warm]", "stability": 0.5, "style": 0.2, "speed": 1.0},
+            "curious":  {"tag": "[curious]", "stability": 0.45, "style": 0.25, "speed": 1.0},
+            "tense":    {"tag": "[tense, low voice]", "stability": 0.35, "style": 0.35, "speed": 0.97},
+            "urgent":   {"tag": "[urgent]", "stability": 0.35, "style": 0.4, "speed": 1.07},
+            "grave":    {"tag": "[grave, slowly]", "stability": 0.4, "style": 0.45, "speed": 0.92},
+            "somber":   {"tag": "[somber]", "stability": 0.45, "style": 0.3, "speed": 0.94},
+            "wry":      {"tag": "[dry, wry]", "stability": 0.4, "style": 0.4, "speed": 1.0},
+            "reveal":   {"tag": "[quietly, shocked]", "stability": 0.35, "style": 0.5, "speed": 0.93},
+        },
     },
     "video": {
         "width": 1920,

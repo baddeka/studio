@@ -54,7 +54,25 @@ def cmd_package(a):
 
 def cmd_voice(a):
     from .voice import make_voice
-    make_voice(Video(a.slug), engine=a.engine, file=a.file, force=a.force)
+    make_voice(Video(a.slug), engine=a.engine, file=a.file, force=a.force, yes=a.yes)
+
+
+def cmd_sample(a):
+    from .voice import sample
+    sample(Video(a.slug), a.paras, voices=a.voice, models=a.model, moods=a.mood, text=a.text,
+           stability=a.stability, max_chars=a.max_chars, open_file=not a.no_open)
+
+
+def cmd_paras(a):
+    from .voice import list_paras
+    list_paras(Video(a.slug))
+
+
+def cmd_credits(a):
+    from .voice import credits_line, subscription
+    if not env("ELEVENLABS_API_KEY"):
+        raise SystemExit("Set ELEVENLABS_API_KEY in .env first.")
+    say(credits_line(subscription()))
 
 
 def cmd_voices(a):
@@ -65,6 +83,9 @@ def cmd_voices(a):
             say(f"  {vid}  {name}  [{cat}]  {labels}")
     else:
         say("No ELEVENLABS_API_KEY in .env, so only the free Windows voices are listed.")
+    if env("ELEVENLABS_API_KEY"):
+        from .voice import credits_line, subscription
+        say(credits_line(subscription()))
     say("Windows draft voices (voice.sapi_voice):")
     for v in sapi_voices():
         say(f"  {v}")
@@ -136,9 +157,11 @@ def cmd_run(a):
         stale = bool(pkg) and bool(pkg.get("script_hash")) and pkg["script_hash"] != script_hash(v)
         package(v, force=stale and pkg.get("made_by") != "hand")
     if last >= 5:
-        from .voice import make_voice
+        from .voice import make_voice, voice_plan
         words = read_json(v.words)
-        if not words or words.get("script_hash") != script_hash(v):
+        # re-voiced when the words, the delivery markup or the voice settings changed; only changed paragraphs cost credits
+        if not words or words.get("script_hash") != script_hash(v) or \
+                (words.get("engine") != "file" and words.get("plan") != voice_plan(v)):
             make_voice(v)
         else:
             say(f"voice: already done ({words['engine']})")
@@ -296,6 +319,18 @@ def build_parser():
     sp.add_argument("--engine", choices=["elevenlabs", "sapi", "file"])
     sp.add_argument("--file", help="use your own recording (mp3/wav)")
     sp.add_argument("--force", action="store_true")
+    sp.add_argument("--yes", action="store_true", help="do not ask before spending credits")
+    sp = add("sample", cmd_sample, "voice a few paragraphs to try a voice, model or mood cheaply")
+    sp.add_argument("paras", nargs="*", help="paragraph numbers from vp paras, e.g. 1 12 40 or 3-5")
+    sp.add_argument("--voice", help="voice id(s), comma-separated to compare")
+    sp.add_argument("--model", help="model(s), e.g. eleven_v4,eleven_multilingual_v2")
+    sp.add_argument("--mood", help="force a mood (or 'none'); comma-separated to compare")
+    sp.add_argument("--stability", type=float)
+    sp.add_argument("--text", help="voice this line instead of script paragraphs (markup allowed)")
+    sp.add_argument("--max-chars", type=int, default=4000)
+    sp.add_argument("--no-open", action="store_true")
+    add("paras", cmd_paras, "numbered narration paragraphs with their moods (free)")
+    add("credits", cmd_credits, "ElevenLabs credits left this month", slug=False)
     add("voices", cmd_voices, "list available voices", slug=False)
     sp = add("board", cmd_board, "open the scene board to add images and clips")
     sp.add_argument("--port", type=int, default=8765)

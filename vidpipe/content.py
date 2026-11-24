@@ -6,7 +6,7 @@ import requests
 
 from .config import PROMPTS, cfg
 from .llm import LLMError, complete
-from .textutil import Script, parse_script
+from .textutil import Script, parse_script, strip_markup
 from .util import backup, read_json, say, sha, warn, write_json, write_text
 
 PART_SHARES = [0.035, 0.12, 0.17, 0.15, 0.24, 0.15, 0.135]
@@ -41,7 +41,9 @@ def _meta(video):
 
 
 def script_hash(video):
-    return sha(video.script.read_text(encoding="utf-8")) if video.script.exists() else ""
+    """Identity of the script's words. Delivery markup ({moods}, [tags], *stress*) is left out, so directing the
+    voice never makes the shot list or package look out of date."""
+    return sha(strip_markup(video.script.read_text(encoding="utf-8"))) if video.script.exists() else ""
 
 
 def research(video, force=False):

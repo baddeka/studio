@@ -242,7 +242,7 @@ def make_inputs(video):
         audio, align = cache / f"selftest_{i}.wav", cache / f"selftest_{i}.json"
         write_wav(audio, samples)
         write_json(align, {"chars": chars, "start": starts, "end": ends, "text": para["text"]})
-        jobs.append({"i": i, "text": para["text"], "audio": audio, "align": align})
+        jobs.append({"i": i, "text": para["text"], "audio": audio, "align": align, "key": f"selftest{i}"})
     stitch(video, s, jobs, "selftest")
 
     sc = cfg()["shotlist"]

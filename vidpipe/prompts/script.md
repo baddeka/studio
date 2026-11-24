@@ -17,7 +17,13 @@ Structure - exactly these 7 parts, with these headings:
 You may rename each part after the colon to something more evocative (for example "## Part 4: The balance sheet"), but keep the "## Part N:" prefix.
 
 Writing for the voice-over:
-- Plain paragraphs of 2 to 5 sentences under each heading. Nothing else: no bullet points, no stage directions, no brackets, no bold, no notes.
+- Plain paragraphs of 2 to 5 sentences under each heading. No bullet points, headings inside parts, bold or notes.
+- Direct the narrator with this delivery markup, and nothing else in brackets. None of it is read out or shown in captions:
+  - {mood} at the very start of a paragraph sets the delivery for it and the following paragraphs of that part. Use only: {calm}, {warm}, {curious}, {tense}, {urgent}, {grave}, {somber}, {wry}, {reveal}, or {normal} to go back to the plain voice. Change the mood when the story's temperature changes, about every 2 to 4 paragraphs, and start every part with one.
+  - [pause] (or [short pause], [long pause]) inside a sentence, right before a reveal, a number that matters or a quote that lands. At most one per paragraph, and not in every paragraph.
+  - Occasional acting tags inside the text where a real narrator would shift: [quietly], [slowly], [wry], [whispers], [sighs]. At most one every three or four paragraphs. Never [laughs], sound effects or accents.
+  - *word* to stress one word, at most once per paragraph, on the word a narrator would lean on.
+  - [silence 1s] on its own line between paragraphs for a beat of silence after a big moment, two or three times per video.
 - Write it to be heard: numbers the way a narrator says them ("$8 billion", "1.2 million customers"), no symbols such as %, &, / or ~ (write "percent", "and"), and spell out abbreviations a narrator would not read as letters.
 - Vary sentence length. Use the specific details from the Scenes and Quotes sections.
 - End each part with a short line that pulls the viewer into the next one.
