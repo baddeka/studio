@@ -69,3 +69,10 @@ video:
 
 shorts:
   max_seconds: 59
+
+music:
+  # Mood folders in library/music; see MUSIC.md. vp get-music fills them with free songs.
+  moods: [calm, rise, tense, heavy, reflective]
+  crossfade: 4.0                  # seconds of crossfade where the mood changes
+  min_section: 12                 # a mood stretch shorter than this keeps the music before it
+  level_lufs: -16                 # every song is evened out to this loudness before music_db and ducking

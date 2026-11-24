@@ -208,7 +208,7 @@ def fake_speech(text, seed=0):
     return np.concatenate(pieces), chars, starts, ends
 
 
-def fake_music(path, seconds=24.0):
+def fake_music(path, seconds=24.0, shift=1.0):
     """A quiet four-chord pad, shorter than the video so the music bed has to loop and crossfade."""
     from .render import SR, _write_wav
     t = np.arange(int(SR * seconds)) / SR
@@ -219,7 +219,7 @@ def fake_music(path, seconds=24.0):
         a, b = int(k * seg * SR), int((k + 1) * seg * SR)
         tt = t[a:b] - t[a]
         env = np.minimum(1, tt / 0.8) * np.minimum(1, (seg - tt) / 0.8)
-        for f in chord:
+        for f in (c * shift for c in chord):
             for side, det in ((0, 0.997), (1, 1.003)):
                 out[a:b, side] += (np.sin(2 * np.pi * f * det * tt) * 0.6 + np.sin(4 * np.pi * f * det * tt) * 0.15) * env
     out *= 0.35 / np.abs(out).max()
@@ -231,7 +231,8 @@ def make_inputs(video):
     """Script, voice-over with word timings, shot list, package, images (one left out), one clip and music."""
     from .textutil import Script
     from .voice import stitch, write_wav
-    write_text(video.dir / "video.yaml", "topic: Self-test video\nangle: ''\nnotes: ''\nwords: 90\n")
+    write_text(video.dir / "video.yaml", "topic: Self-test video\nangle: ''\nnotes: ''\nwords: 90\n"
+               "music:\n  1: tense\n  2: calm\n")
     write_text(video.script, SCRIPT)
     s = Script(SCRIPT)
     cache = video.p("audio", "cache")
@@ -292,7 +293,9 @@ def make_inputs(video):
     for scene in scenes:
         if scene["type"] == "motion":
             fake_clip(images / f"{scene['id']}.png", video.assets("clips") / f"{scene['id']}.mp4")
-    fake_music(video.dir / "music" / "selftest_pad.wav")
+    # Two mood folders: part 1 is tense, part 2 on is calm, so the bed has to crossfade between them.
+    fake_music(video.dir / "music" / "tense" / "selftest_low.wav", shift=0.75)
+    fake_music(video.dir / "music" / "calm" / "selftest_pad.wav")
     return shot
 
 
@@ -446,6 +449,10 @@ def selftest(keep=False, workers=None):
             n_audio = 2 + (1 if v.get("sfx", True) else 0)
             check_fcpxml(r, video.edit("timeline.fcpxml"), n, n_audio)
             report = video.edit("report.md").read_text(encoding="utf-8")
+            music = read_json(video.edit("music_bed.json"), {}).get("sections", [])
+            r.check("music: mood sections", [m["mood"] for m in music] == ["tense", "calm"]
+                    and all(m.get("songs") for m in music) and abs(music[-1]["end"] - timing["duration"]) < 0.05,
+                    ", ".join(f"{m['mood']} {m['start']:.0f}-{m['end']:.0f} s" for m in music))
             r.check("rough cut: every scene has its picture", "Missing images" not in report, "edit/report.md")
             pkg_md = video.package_md.read_text(encoding="utf-8") if video.package_md.exists() else ""
             r.check("05_package.md: chapters in the description", "0:00 " in pkg_md, video.package_md.name)

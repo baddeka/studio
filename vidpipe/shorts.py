@@ -2,8 +2,9 @@ import os
 from pathlib import Path
 
 from .config import ROOT, cfg, ffmpeg_bin
-from .cut import music_tracks, scene_plan, sfx_events
-from .render import concat, mix_audio, music_bed, render_all, sfx_track
+from .cut import scene_plan, sfx_events
+from .music import build_bed
+from .render import concat, mix_audio, render_all, sfx_track
 from .timing import compute, shorts_ass
 from .util import read_json, run, say, warn
 
@@ -44,7 +45,7 @@ def build_shorts(video, only=None, workers=None):
     w, h = sc["width"], sc["height"]
     out_dir = video.edit("shorts")
     out_dir.mkdir(exist_ok=True)
-    tracks = music_tracks(video)
+    full_bed, _ = build_bed(video, timing, video.edit("music_bed.flac"))
     made = []
     for k, sh in enumerate(pkg["shorts"], 1):
         if only and k not in only:
@@ -60,10 +61,7 @@ def build_shorts(video, only=None, workers=None):
         run([ffmpeg_bin(), "-y", "-v", "error", "-ss", f"{t0:.3f}", "-t", f"{dur:.3f}", "-i", str(video.voice_wav),
              "-af", "afade=t=in:d=0.05,afade=t=out:st=" + f"{max(0, dur - 0.3):.3f}" + ":d=0.3", str(voice)])
         bed = None
-        if tracks:
-            full_bed = video.edit("music_bed.flac")
-            if not full_bed.exists():
-                music_bed(tracks, timing["duration"], full_bed)
+        if full_bed:
             bed = base.with_name(base.name + "_music.flac")
             run([ffmpeg_bin(), "-y", "-v", "error", "-ss", f"{t0:.3f}", "-t", f"{dur:.3f}", "-i", str(full_bed),
                  "-af", f"afade=t=in:d=0.6,afade=t=out:st={max(0, dur - 1.2):.3f}:d=1.2", str(bed)])
