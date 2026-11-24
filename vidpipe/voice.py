@@ -192,11 +192,11 @@ def confirm_spend(n, sub, v, yes):
     if sub:
         say("  " + credits_line(sub))
         if n > sub["left"]:
-            warn(f"this needs about {n:,} credits but only {sub['left']:,} are left; ElevenLabs will stop part way")
+            warn(f"this needs up to {n:,} credits but only {sub['left']:,} are left; ElevenLabs will stop part way")
     if yes or n <= int(v.get("confirm_chars", 2500)) or not sys.stdin or not sys.stdin.isatty():
         return True
     try:
-        ans = input(f"  This uses about {n:,} ElevenLabs credits. Go ahead? [y/N] ")
+        ans = input(f"  This uses up to {n:,} ElevenLabs credits (one per character at most; the API often charges less). Go ahead? [y/N] ")
     except EOFError:
         return True
     return ans.strip().lower() in ("y", "yes")
@@ -733,7 +733,7 @@ def list_paras(video):
         extra = f"  +{p['silence']:g}s silence" if p["silence"] else ""
         show = p["voice"] if len(p["voice"]) <= 90 else p["voice"][:87] + "..."
         say(f"{i:>4}  {len(text):>4} ch  {mood}{show}{extra}")
-    say(f"{len(s.paras)} paragraphs, about {total:,} characters for a full voice-over with {v['model']}"
+    say(f"{len(s.paras)} paragraphs, {total:,} characters for a full voice-over (at most that many credits) with {v['model']}"
         f" ({'tags on' if expressive(v) else 'tags off'}).")
     n = len(s.paras)
     say(f"Try a few first:  vp sample {video.slug} 1 {max(1, n // 3)} {max(1, 2 * n // 3)}")
@@ -811,7 +811,7 @@ def sample(video, numbers=None, voices=None, models=None, moods=None, text=None,
         plans.append((v, mood, sp, jobs))
     todo = {j["key"]: j for _, _, _, jobs in plans for j in jobs if not (j["audio"].exists() and j["align"].exists())}
     n = sum(len(j["text"]) for j in todo.values())
-    say(f"sample: {len(idx)} paragraph(s) x {len(variants)} version(s); {len(todo)} clip(s) to make, about {n:,} credits")
+    say(f"sample: {len(idx)} paragraph(s) x {len(variants)} version(s); {len(todo)} clip(s) to make, up to {n:,} credits")
     if n > max_chars:
         raise SystemExit(f"That is more than {max_chars:,} characters. Pick fewer or shorter paragraphs, or pass --max-chars.")
     before = subscription()
