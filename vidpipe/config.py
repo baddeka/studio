@@ -106,6 +106,19 @@ DEFAULTS = {
         "true_peak": -2.0,
         "workers": 3,
     },
+    "music": {
+        # Song folders inside library/music (or videos/<slug>/music). Loose songs in library/music still work.
+        "moods": ["calm", "rise", "tense", "heavy", "reflective"],
+        # When a part has no music mood in video.yaml, the script's voice moods pick one (most words wins).
+        "from_voice": {"calm": "calm", "warm": "calm", "curious": "calm", "urgent": "rise", "tense": "tense",
+                       "grave": "heavy", "reveal": "heavy", "somber": "reflective"},
+        # A mood whose folder is still empty borrows from these, in order.
+        "fallback": {"calm": ["reflective", "rise"], "rise": ["calm", "tense"], "tense": ["heavy", "rise"],
+                     "heavy": ["tense", "reflective"], "reflective": ["calm", "heavy"]},
+        "crossfade": 4.0,       # seconds of crossfade where the mood changes
+        "min_section": 12,      # a mood stretch shorter than this keeps the music before it
+        "level_lufs": -16,      # every song is evened out to this loudness before music_db and ducking
+    },
     "shorts": {"max_seconds": 59, "width": 1080, "height": 1920},
     "style": {
         "bg": "#0B0B0C",

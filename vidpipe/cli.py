@@ -3,7 +3,7 @@ import re
 
 import yaml
 
-from .config import ROOT, VIDEOS, Video, cfg, env
+from .config import VIDEOS, Video, cfg, env
 from .util import ensure_utf8_console, read_json, say, warn
 
 
@@ -104,6 +104,39 @@ def cmd_sort(a):
 def cmd_cut(a):
     from .cut import build_cut
     build_cut(Video(a.slug), draft=a.draft, workers=a.workers, music=not a.no_music)
+
+
+def cmd_music(a):
+    from .music import build_bed, describe, folder_status
+    video = Video(a.slug)
+    say("Song folders (library/music):")
+    for name, n in folder_status(video):
+        say(f"  {name:<26} {n} song(s)" + ("   <- empty, add 2-3 songs (see MUSIC.md)" if n == 0 else ""))
+    if not (video.words.exists() and video.shotlist.exists()):
+        say("The music plan needs the voice-over and shot list first (vp run).")
+        return 0
+    from .timing import compute
+    timing = compute(video)
+    bed, secs = build_bed(video, timing, video.edit("music_bed.flac"))
+    say("\nMusic plan (change it in videos\\%s\\video.yaml under music:)" % video.slug)
+    for line in describe(secs):
+        say("  " + line[2:])
+    if bed:
+        say(f"\nListen to the music alone: {bed}")
+    return 0
+
+
+def cmd_get_music(a):
+    from .music import STARTER, folder_status, get_starter
+    say(f"Downloading the starter songs ({len(STARTER)} free Scott Buckley tracks, CC BY 4.0) into library\\music ...")
+    got, failed = get_starter()
+    say(f"{got} downloaded" + (", the rest were already there." if not failed else "."))
+    for mood, title, page, err in failed:
+        warn(f"could not download {title} ({err}). Open {page}, click the MP3 download and put the file in "
+             f"library\\music\\{mood}")
+    say("Songs per folder: " + ", ".join(f"{n} {c}" for n, c in folder_status()))
+    say("The credits for the songs a video uses are added to its description (05_package.md) automatically.")
+    return 1 if failed else 0
 
 
 def cmd_shorts(a):
@@ -279,8 +312,8 @@ def cmd_doctor(a):
     say(f"  Claude: engine {cfg()['llm']['engine']} -> {pick_engine()}, model {cfg()['llm']['model']}, "
         f"API key {'set' if env('ANTHROPIC_API_KEY') else 'not set'}, CLI {find_cli() or 'not found'}")
     say(f"  ElevenLabs key: {'set' if env('ELEVENLABS_API_KEY') else 'not set (free Windows voice will be used)'}")
-    music = [p for p in (ROOT / 'library' / 'music').glob('*.*') if p.suffix.lower() in ('.mp3', '.wav', '.m4a', '.flac', '.ogg')]
-    say(f"  music tracks in library/music: {len(music)}")
+    from .music import folder_status
+    say("  music: " + ", ".join(f"{name} {n}" for name, n in folder_status()))
     say("All tools found. Run 'vp selftest' to render a test video." if ok else "Some tools are missing; see above.")
     return 0 if ok else 1
 
@@ -340,6 +373,8 @@ def build_parser():
     sp.add_argument("--draft", action="store_true")
     sp.add_argument("--no-music", action="store_true")
     sp.add_argument("--workers", type=int)
+    add("get-music", cmd_get_music, "download the free starter songs into the mood folders", slug=False)
+    add("music", cmd_music, "show which music mood plays where, and make the music bed to listen to")
     sp = add("shorts", cmd_shorts, "render the vertical Shorts")
     sp.add_argument("--only", help="comma-separated short numbers, e.g. 1,3")
     sp.add_argument("--workers", type=int)
@@ -364,7 +399,7 @@ def main(argv=None):
     ensure_utf8_console()
     args = build_parser().parse_args(argv)
     try:
-        if args.fn in (cmd_board, cmd_sort, cmd_cut, cmd_shorts, cmd_thumb, cmd_timing):
+        if args.fn in (cmd_board, cmd_sort, cmd_cut, cmd_shorts, cmd_thumb, cmd_timing, cmd_music):
             from .content import adopt_handmade
             adopt_handmade(Video(args.slug))
         return args.fn(args) or 0

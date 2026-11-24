@@ -630,7 +630,10 @@ def render_package_md(video):
         return
     timing = read_json(video.timing)
     sources = read_json(video.sources, [])
-    description, more = describe(data, timing, sources)
+    from .music import credits
+    songs = credits((read_json(video.edit("music_bed.json"), {}) or {}).get("sections")) \
+        if video.edit("music_bed.flac").exists() else []
+    description, more = describe(data, timing, sources, songs)
     comment, lost = pinned_comment(data, more)
     if lost:
         warn(f"{lost} sources fit in neither the description nor the pinned comment")
@@ -668,7 +671,7 @@ def full_description(data, timing, sources):
     return describe(data, timing, sources)[0]
 
 
-def describe(data, timing, sources):
+def describe(data, timing, sources, songs=None):
     """The YouTube description, and the source lines that did not fit in it (they go in the pinned comment)."""
     parts = [data["description"].strip()]
     if timing and timing.get("chapters"):
@@ -678,6 +681,8 @@ def describe(data, timing, sources):
         parts.append("\n".join(ch))
     else:
         parts.append("Chapters: filled in after the voice-over is made (run vp cut).")
+    if songs:
+        parts.append("\n".join(["Music"] + list(songs)))
     disclaimer = ("This video is for education and entertainment, not financial or legal advice. "
                   "People who have not been convicted are presumed innocent; allegations are described as such.")
     tags = " ".join(h if h.startswith("#") else f"#{h}" for h in data.get("hashtags", []))

@@ -3,9 +3,10 @@ from pathlib import Path
 from xml.sax.saxutils import escape
 
 from .cards import chapter_overlay, lower_third, placeholder
-from .config import LIBRARY, cfg
+from .config import cfg
 from .content import render_package_md
-from .render import (concat, job_key, mix_audio, music_bed, mux, probe_duration, render_all, sfx_track)
+from .music import build_bed, describe
+from .render import (concat, job_key, mix_audio, mux, probe_duration, render_all, sfx_track)
 from .timing import compute, write_srt
 from .util import file_sig, read_json, say, sha, warn, write_text
 
@@ -24,12 +25,9 @@ def find_assets(video):
 
 
 def music_tracks(video):
-    for folder in (video.dir / "music", LIBRARY / "music"):
-        if folder.exists():
-            tracks = sorted(p for p in folder.iterdir() if p.suffix.lower() in (".mp3", ".wav", ".m4a", ".flac", ".ogg"))
-            if tracks:
-                return tracks
-    return []
+    """Every song the video could use (mood folders and loose songs)."""
+    from .music import all_tracks
+    return all_tracks(video)
 
 
 def scene_plan(video, tscenes, fps, w, h, draft=False, vertical=False):
@@ -138,9 +136,8 @@ def build_cut(video, draft=False, workers=None, music=True):
     rendered = render_all(jobs, workers)
     name = "draft" if draft else "roughcut"
     video_only = concat([j["out"] for j in jobs], video.edit(f"{name}_video.mp4"))
-    tracks = music_tracks(video) if music else []
-    bed = music_bed(tracks, timing["duration"], video.edit("music_bed.flac")) if tracks else None
-    if not tracks:
+    bed, sections = build_bed(video, timing, video.edit("music_bed.flac")) if music else (None, [])
+    if not bed:
         video.edit("music_bed.flac").unlink(missing_ok=True)
     sfx = sfx_track(sfx_events(plan), timing["duration"], video.edit("sfx.flac")) if v.get("sfx", True) else None
     mix = mix_audio(video.voice_wav, timing["duration"], video.edit(f"{name}_mix.m4a"), music=bed, sfx=sfx)
@@ -152,13 +149,13 @@ def build_cut(video, draft=False, workers=None, music=True):
     if not draft:
         write_fcpxml(video, plan, timing, bed, sfx, words_data["duration"])
     render_package_md(video)
-    write_report(video, plan, timing, rendered, out, tracks, n_caps)
+    write_report(video, plan, timing, rendered, out, sections if bed else [], n_caps)
     say(f"cut: {timing['duration'] / 60:.1f} min -> {out.relative_to(video.dir)}"
         + ("" if draft else ", timeline.fcpxml, captions.srt"))
     return out
 
 
-def write_report(video, plan, timing, rendered, out, tracks, n_caps):
+def write_report(video, plan, timing, rendered, out, sections, n_caps):
     missing = [p for p in plan if p["note"] == "missing image"]
     notes = [p for p in plan if p["note"] and p["note"] != "missing image"]
     kinds = {}
@@ -167,8 +164,14 @@ def write_report(video, plan, timing, rendered, out, tracks, n_caps):
     lines = [f"# Cut report: {video.slug}", "",
              f"- Output: {out.name}, {timing['duration'] / 60:.1f} min, {len(plan)} scenes ({rendered} re-rendered)",
              f"- Shown as: " + ", ".join(f"{k} {n}" for k, n in sorted(kinds.items())),
-             f"- Music: {len(tracks)} track(s)" + ("" if tracks else " - add files to library/music for a music bed"),
+             f"- Music: {len(sections)} mood section(s)" if sections
+             else "- Music: none - put songs in the mood folders in library/music (see MUSIC.md)",
              f"- Captions: {n_caps} cues in captions.srt (upload to YouTube as subtitles)", ""]
+    if sections:
+        from .music import credits
+        lines += ["## Music", ""] + describe(sections) + [""]
+        if credits(sections):
+            lines += ["Credits (already in the description in 05_package.md):", ""] + [f"- {c}" for c in credits(sections)] + [""]
     if missing:
         lines += [f"## Missing images ({len(missing)})", "", "Open the scene board (vp board) to add them.", ""]
         lines += [f"- {p['scene']['id']} at {p['timing']['start']:.1f}s: {p['scene'].get('visual', '')}" for p in missing]
