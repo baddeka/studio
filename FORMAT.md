@@ -31,7 +31,12 @@ Another paragraph.
 ```
 
 - Exactly 7 parts, headings `## Part N: Title`. The title after the colon becomes the YouTube chapter name.
-- Only narration under the headings: no bullet points, bold, brackets or stage directions. A paragraph wrapped in `[ ]` or a line starting with `>` is treated as a note and not read aloud.
+- Only narration under the headings: no bullet points or bold. A paragraph wrapped in `[ ]` or a line starting with `>` is treated as a note and not read aloud.
+- Delivery markup is allowed and recommended (full guide in VOICE.md). It is never read out, shown in captions or counted as words, and adding or changing it does not change the beat numbers or make the shot list out of date:
+  - `{tense}` at the start of a paragraph: the mood for it and the rest of that part. Moods are defined in `config.yaml` (`voice: moods:`); `{normal}` goes back to the plain voice.
+  - `[pause]`, `[short pause]`, `[long pause]`, and acting tags such as `[quietly]`, `[slowly]`, `[wry]`, `[whispers]` inside a sentence.
+  - `*word*` stresses one word.
+  - `[silence 1.5s]` on its own line adds that much silence after the paragraph above.
 - Written to be spoken: "$8 billion", "percent" instead of %, no symbols.
 - About 3,500 words for a 23-minute video.
 

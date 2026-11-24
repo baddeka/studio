@@ -34,13 +34,28 @@ midjourney:
 voice:
   engine: elevenlabs              # elevenlabs, or sapi for the free Windows draft voice
   voice_id: ""                    # empty = George (warm British narrator). Run "vp voices" to list yours.
-  model: eleven_multilingual_v2   # or eleven_v4
+  model: eleven_multilingual_v2   # eleven_v4 / eleven_v3 act on [tags] and moods; try first: vp sample <slug> --model eleven_v4,eleven_multilingual_v2
   stability: 0.45
   similarity: 0.8
   style: 0.1
   speed: 1.0
   pause_paragraph: 0.35
   pause_part: 0.9
+  # How to direct the delivery: see VOICE.md. A {mood} in the script picks one of these.
+  # tag = what eleven_v4 / eleven_v3 hear before the paragraph. stability/style/speed = what eleven_multilingual_v2
+  # uses instead (lower stability = more emotion, higher style = more drama, speed 0.7-1.2). Add your own moods here.
+  direction: ""                   # tag for paragraphs with no mood, e.g. "[calm, low documentary voice]" (v4/v3 only)
+  confirm_chars: 2500             # ask before a voice-over that spends more credits than this
+  moods:
+    calm:    {tag: "[calm]",              stability: 0.55, style: 0.05, speed: 1.0}
+    warm:    {tag: "[warm]",              stability: 0.5,  style: 0.2,  speed: 1.0}
+    curious: {tag: "[curious]",           stability: 0.45, style: 0.25, speed: 1.0}
+    tense:   {tag: "[tense, low voice]",  stability: 0.35, style: 0.35, speed: 0.97}
+    urgent:  {tag: "[urgent]",            stability: 0.35, style: 0.4,  speed: 1.07}
+    grave:   {tag: "[grave, slowly]",     stability: 0.4,  style: 0.45, speed: 0.92}
+    somber:  {tag: "[somber]",            stability: 0.45, style: 0.3,  speed: 0.94}
+    wry:     {tag: "[dry, wry]",          stability: 0.4,  style: 0.4,  speed: 1.0}
+    reveal:  {tag: "[quietly, shocked]",  stability: 0.35, style: 0.5,  speed: 0.93}
 
 video:
   fps: 30
