@@ -44,11 +44,11 @@ The model goes in `config.yaml` under `voice: model:`.
 
 ## How to work without wasting credits
 
-ElevenLabs charges per character. Your Starter plan has 30,000 a month, and a full FTX voice-over is about 20,000. So try things on a few paragraphs first:
+ElevenLabs charges by the character: at most one credit per character, and the API is often cheaper (your first FTX take was 19,575 characters and cost about 7,800 credits). The pipeline counts characters, so its numbers are an upper limit; after each run it prints what ElevenLabs actually took. Try things on a few paragraphs first:
 
 1. **Put your voice in.** Run `.\vp voices`, copy your voice's id, and paste it into `config.yaml` as `voice_id: "..."`.
 2. **See the paragraphs (free).** `.\vp paras ftx` lists every paragraph with a number, its mood and its length.
-3. **Try a few.** `.\vp sample ftx 1 20 47` voices just paragraphs 1, 20 and 47 (about 1,000 credits) and opens the result. The files are in `videos\ftx\audio\samples`.
+3. **Try a few.** `.\vp sample ftx 1 20 47` voices just paragraphs 1, 20 and 47 (1,000 credits at most) and opens the result. The files are in `videos\ftx\audio\samples`.
 4. **Compare.** Put commas between choices, and you get one file for each combination:
    - `.\vp sample ftx 20 --model eleven_v4,eleven_multilingual_v2` compares the two models.
    - `.\vp sample ftx 47 --mood tense,grave,none` compares moods on the same paragraph.
@@ -61,8 +61,8 @@ Money-saving rules:
 
 - A paragraph is only paid for again if its words, marks, mood or settings changed. Changing the mood of five paragraphs re-voices five paragraphs, not the whole video.
 - Anything you sampled is reused by the full voice-over, as long as the voice, model and settings are the same.
-- Changing the voice, the model or the main settings re-voices everything, at about 20,000 credits.
-- `.\vp credits` shows what is left this month.
+- Changing the voice, the model or the main settings re-voices everything: about 20,000 characters for FTX.
+- `.\vp credits` shows what is left, read straight from your ElevenLabs account.
 
 ## Tips from narration work
 
