@@ -231,5 +231,6 @@ class Video:
 
 
 def env(name):
+    cfg()  # loads .env the first time, so a key is found even before any setting is read
     v = os.environ.get(name, "").strip()
     return v or None

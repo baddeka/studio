@@ -285,3 +285,22 @@ class DeliveryMockTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class EnvTests(unittest.TestCase):
+    def test_key_in_dotenv_is_found_before_any_setting_is_read(self):
+        """vp sample and vp credits check the key first; .env must already be loaded then."""
+        import vidpipe.config as c
+        saved, c._cfg = c._cfg, None
+        old = os.environ.pop("ELEVENLABS_API_KEY", None)
+        calls = []
+        real = c.load_dotenv
+        c.load_dotenv = lambda *a, **k: (calls.append(1), os.environ.__setitem__("ELEVENLABS_API_KEY", "from-dotenv"))
+        try:
+            self.assertEqual(c.env("ELEVENLABS_API_KEY"), "from-dotenv")
+            self.assertEqual(len(calls), 1)
+        finally:
+            c.load_dotenv, c._cfg = real, saved
+            os.environ.pop("ELEVENLABS_API_KEY", None)
+            if old is not None:
+                os.environ["ELEVENLABS_API_KEY"] = old
